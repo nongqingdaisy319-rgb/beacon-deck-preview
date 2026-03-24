@@ -108,30 +108,7 @@
         radial-gradient(ellipse 60% 55% at 50% 50%, transparent 30%, rgba(0,0,0,0.4) 65%, rgba(0,0,0,1) 90%);
       pointer-events: none;
     }
-    /* Pulsing glow behind the image */
-    .hero-img-wrap::before {
-      content: '';
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 60%; height: 60%;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(0,248,248,0.08) 0%, transparent 70%);
-      animation: glowPulse 4s ease-in-out infinite;
-      pointer-events: none;
-      z-index: -1;
-    }
-    @keyframes glowPulse {
-      0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
-      50% { opacity: 1; transform: translate(-50%, -50%) scale(1.15); }
-    }
-    /* Floating particles around the image */
-    .hero-particle {
-      position: absolute;
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 2;
-    }
+    /* Static hero — no animation */
 
     /* Subtitle + button area below image */
     .hero-bottom {
@@ -290,17 +267,9 @@
         BitMart <span class="accent">Beacon</span>
       </h1>
 
-      <!-- Main visual — BIG, prominent, animated -->
+      <!-- Main visual — static -->
       <div class="hero-img-wrap" id="hero-img">
-        <img src="hero-visual.png" alt="BitMart Beacon" id="hero-lobster" />
-        <!-- Floating particles -->
-        <div class="hero-particle" style="width:4px;height:4px;background:var(--green);top:15%;left:12%;opacity:0.4"></div>
-        <div class="hero-particle" style="width:3px;height:3px;background:#F97316;top:25%;right:15%;opacity:0.3"></div>
-        <div class="hero-particle" style="width:5px;height:5px;background:var(--green);bottom:25%;left:18%;opacity:0.25"></div>
-        <div class="hero-particle" style="width:3px;height:3px;background:var(--cyan);top:40%;right:10%;opacity:0.35"></div>
-        <div class="hero-particle" style="width:4px;height:4px;background:#F97316;bottom:35%;right:22%;opacity:0.3"></div>
-        <div class="hero-particle" style="width:2px;height:2px;background:var(--green);top:10%;right:30%;opacity:0.5"></div>
-        <div class="hero-particle" style="width:3px;height:3px;background:var(--cyan);bottom:15%;left:35%;opacity:0.3"></div>
+        <img src="hero-visual.png" alt="BitMart Beacon" />
       </div>
 
       <!-- Subtitle + button below image -->
@@ -450,54 +419,7 @@
   // Nav scroll
   ScrollTrigger.create({ start: 'top -60', onUpdate: s => document.getElementById('nav').classList.toggle('scrolled', s.progress > 0) });
 
-  // Hero entrance
-  const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-  tl.from('.hero-title', { opacity: 0, y: 40, duration: 0.9 }, 0.2)
-    .from('#hero-img', { opacity: 0, scale: 0.9, duration: 1.4 }, 0.5)
-    .from('.hero-bottom', { opacity: 0, y: 24, duration: 0.7 }, 1.1);
-
-  // Lobster floating animation — gentle breathing motion
-  gsap.to('#hero-lobster', {
-    y: -12, rotation: 0.5,
-    duration: 3, ease: 'sine.inOut', yoyo: true, repeat: -1
-  });
-
-  // Floating particles
-  document.querySelectorAll('.hero-particle').forEach((p, i) => {
-    gsap.to(p, {
-      y: `random(-25, 25)`, x: `random(-15, 15)`,
-      opacity: `random(0.15, 0.6)`,
-      duration: `random(2, 4)`,
-      ease: 'sine.inOut', yoyo: true, repeat: -1,
-      delay: i * 0.3,
-    });
-  });
-
-  // Mouse-tracking tilt on the lobster image
-  const heroImg = document.getElementById('hero-img');
-  const lobster = document.getElementById('hero-lobster');
-  document.addEventListener('mousemove', (e) => {
-    if (window.innerWidth < 768) return;
-    const rect = heroImg.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    const dx = (e.clientX - cx) / rect.width;
-    const dy = (e.clientY - cy) / rect.height;
-    gsap.to(lobster, {
-      rotateY: dx * 8,
-      rotateX: -dy * 5,
-      duration: 0.6,
-      ease: 'power2.out',
-      overwrite: 'auto',
-    });
-  });
-
-  // Hero parallax
-  gsap.to('#hero-img', {
-    y: 60,
-    ease: 'none',
-    scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
-  });
+  // Static hero — no animation on hero image
 
   // Section reveals
   gsap.utils.toArray('.sh, .demo-box, .fc, .hc, .mc, .rm-i, .cta-w').forEach(el => {
