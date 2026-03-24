@@ -139,7 +139,8 @@
     /* hero — clean layout */
 
     /* ===== SECTIONS ===== */
-    section { padding: clamp(80px, 10vw, 120px) max(24px, 4vw); max-width: 1200px; margin-left: auto; margin-right: auto; }
+    section { padding: clamp(80px, 10vw, 120px) max(24px, 4vw); }
+    .sec-inner { max-width: 1200px; margin: 0 auto; }
     .sh { text-align: center; max-width: 640px; margin: 0 auto 60px; }
     .sh-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--green); margin-bottom: 12px; }
     .sh-title { font-family: 'Alexandria'; font-size: clamp(30px, 4vw, 48px); font-weight: 700; line-height: 1.5; margin-bottom: 12px; text-wrap: balance; }
@@ -147,7 +148,7 @@
 
     /* Demo — Beacon Deck product UI style */
     .demo-s { background: linear-gradient(180deg, #000, var(--surface)); }
-    .demo-w { max-width: 1060px; margin: 0 auto; }
+    .demo-w { max-width: 1200px; margin: 0 auto; }
     .demo-box { background: #111820; border-radius: 14px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 32px 80px rgba(0,0,0,0.4); display: flex; min-height: 420px; }
     /* Left sidebar */
     .demo-sidebar { width: 200px; background: #0D1118; border-right: 1px solid var(--border); padding: 16px 0; flex-shrink: 0; }
@@ -181,7 +182,7 @@
 
     /* Features */
     .feat-s { background: var(--surface); }
-    .feat-g { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; max-width: 1060px; margin: 0 auto; }
+    .feat-g { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; max-width: 1200px; margin: 0 auto; }
     .fc { padding: 28px; background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 12px; transition: transform 0.2s ease-out, border-color 0.2s; }
     .fc:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.1); }
     .fc-i { font-size: 28px; margin-bottom: 14px; background: none !important; }
@@ -190,7 +191,7 @@
 
     /* How */
     .how-s { background: #000; }
-    .how-g { display: flex; gap: 0; max-width: 960px; margin: 0 auto; align-items: flex-start; position: relative; }
+    .how-g { display: flex; gap: 0; max-width: 1200px; margin: 0 auto; align-items: flex-start; position: relative; }
     .hc { flex: 1; text-align: center; padding: 32px 18px; position: relative; background: none; border: none; }
     .hc-n { width: 44px; height: 44px; border-radius: 50%; background: rgba(0,248,248,0.08); border: 2px solid var(--green); display: flex; align-items: center; justify-content: center; font-family: 'Alexandria'; font-size: 18px; font-weight: 700; color: var(--green); margin: 0 auto 18px; position: relative; z-index: 2; }
     /* Connector line between numbers */
@@ -248,7 +249,8 @@
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
 
-    footer { padding: 32px max(24px, 4vw); border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; }
+    footer { padding: 32px max(24px, 4vw); border-top: 1px solid var(--border); }
+    .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
     footer span { font-size: 12px; color: var(--text-3); }
     footer ul { display: flex; gap: 16px; list-style: none; }
     footer a { font-size: 12px; color: var(--text-3); text-decoration: none; }
@@ -420,7 +422,7 @@
     </div>
   </section>
 
-  <footer><span>© 2025 BitMart. All rights reserved.</span><ul><li><a href="#">Terms</a></li><li><a href="#">Privacy</a></li><li><a href="#">Docs</a></li></ul></footer>
+  <footer><div class="footer-inner"><span>© 2025 BitMart. All rights reserved.</span><ul><li><a href="#">Terms</a></li><li><a href="#">Privacy</a></li><li><a href="#">Docs</a></li></ul></div></footer>
 
   <script>
   // Lenis smooth scroll
