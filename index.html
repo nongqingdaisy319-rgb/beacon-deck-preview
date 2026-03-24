@@ -278,7 +278,7 @@
 
   <nav id="nav">
     <div class="n-left"><a href="#" class="n-logo">BitMart</a><span class="n-tag">Beacon</span></div>
-    <ul class="n-links"><li><a href="#features">Features</a></li><li><a href="#demo">Demo</a></li><li><a href="#roadmap">Roadmap</a></li></ul>
+    <ul class="n-links"><li><a href="#features">Features</a></li><li><a href="#demo">Demo</a></li></ul>
     <div class="n-right"><button class="btn-o">Log In</button><a href="#" class="btn-g">Try Beacon →</a></div>
   </nav>
 
@@ -311,41 +311,81 @@
     </div>
   </section>
 
-  <!-- Demo — matches actual Beacon Deck UI -->
+  <!-- Demo — Beacon Deck product UI -->
   <section class="demo-s" id="demo">
-    <div class="sh"><div class="sh-label">Live Preview</div><h2 class="sh-title">Talk to Beacon Like a Pro</h2><p class="sh-desc">Market trends, strategies, token analysis — instant data-driven answers.</p></div>
+    <div class="sh"><div class="sh-label">Live Preview</div><h2 class="sh-title">Talk to Beacon Like a Pro</h2><p class="sh-desc">Strategy generation, backtest reports, one-click deployment — all in natural language.</p></div>
     <div class="demo-w">
       <div class="demo-box">
         <!-- Left sidebar -->
         <div class="demo-sidebar">
           <div class="demo-sidebar-title">⚡ Beacon Deck</div>
           <div class="demo-group">
-            <div class="demo-group-label">Copy Trading</div>
-            <div class="demo-channel active"><span class="demo-channel-icon">#</span> copy trading Master</div>
+            <div class="demo-group-label">Trading</div>
+            <div class="demo-channel active"><span class="demo-channel-icon">#</span> Strategy Discussion <span style="background:rgba(0,248,248,0.15);color:var(--green);font-size:9px;padding:1px 5px;border-radius:3px;margin-left:auto">3</span></div>
+            <div class="demo-channel"><span class="demo-channel-icon">#</span> Signal Log <span style="background:rgba(0,248,248,0.15);color:var(--green);font-size:9px;padding:1px 5px;border-radius:3px;margin-left:auto">5</span></div>
           </div>
           <div class="demo-group">
-            <div class="demo-group-label">Grid Bot</div>
-            <div class="demo-channel"><span class="demo-channel-icon">#</span> grid strategies</div>
-          </div>
-          <div class="demo-group">
-            <div class="demo-group-label">Social</div>
-            <div class="demo-channel"><span class="demo-channel-icon">#</span> X insights</div>
+            <div class="demo-group-label">Research</div>
+            <div class="demo-channel"><span class="demo-channel-icon">📄</span> Market Analysis <span style="background:rgba(0,248,248,0.15);color:var(--green);font-size:9px;padding:1px 5px;border-radius:3px;margin-left:auto">2</span></div>
+            <div class="demo-channel"><span class="demo-channel-icon">📄</span> On-chain Data</div>
+            <div class="demo-channel"><span class="demo-channel-icon">📄</span> Report Archive</div>
           </div>
         </div>
         <!-- Right chat -->
         <div class="demo-chat">
-          <div class="demo-chat-header"># copy trading Master <span>· Tasks</span></div>
+          <div class="demo-chat-header"># Strategy Discussion <span>· Strategy Gen · Backtest Reports · Deployment</span></div>
           <div class="demo-chat-body">
-            <!-- User message -->
-            <div class="chat-msg chat-msg-right">
-              <div class="chat-bubble chat-bubble-user">Which copy trading master should I follow?</div>
-            </div>
-            <!-- Bot reply -->
+            <!-- Backtest report card -->
             <div class="chat-msg">
               <div class="chat-avatar chat-avatar-bot">🤖</div>
-              <div>
-                <div class="chat-name chat-name-bot">openclaw <span style="background:rgba(0,248,248,0.12);color:var(--green);font-size:9px;padding:1px 5px;border-radius:3px;margin-left:4px">BOT</span></div>
-                <div class="chat-bubble chat-bubble-bot">Based on recent 30-day performance, here are the top 3 copy trading masters:<br><br>📊 <strong>TraderX</strong> — ROI +42.3%, Win rate 78%, Max DD -8.2%<br>📊 <strong>CryptoAlpha</strong> — ROI +38.7%, Win rate 82%, Max DD -5.1%<br>📊 <strong>SwingKing</strong> — ROI +35.2%, Win rate 75%, Max DD -11.4%<br><br>🏆 Recommended: <strong style="color:var(--green)">CryptoAlpha</strong> — best risk-adjusted returns with lowest max drawdown.</div>
+              <div style="flex:1;max-width:80%">
+                <div class="chat-name chat-name-bot">Beacon Alpha <span style="background:rgba(0,248,248,0.12);color:var(--green);font-size:9px;padding:1px 5px;border-radius:3px;margin-left:4px">BOT</span></div>
+                <!-- Backtest card -->
+                <div style="background:#161D27;border:1px solid var(--border);border-radius:10px;padding:16px;margin-top:6px">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                    <strong style="font-size:14px">BTC Trend Strategy — 2026 Q1 Backtest</strong>
+                    <span style="font-size:11px;cursor:pointer">↗</span>
+                  </div>
+                  <div style="font-size:12px;color:var(--text-2);margin-bottom:12px">Q1 Total Return +47.3%, Max DD -12.8%, Sharpe 2.14, Suggested 2% position</div>
+                  <div style="display:inline-block;font-size:11px;border:1px solid var(--border);border-radius:5px;padding:4px 10px;color:var(--text-2)">Open in Canvas</div>
+                </div>
+                <!-- Deploy action card -->
+                <div style="background:#161D27;border:1px solid var(--border);border-radius:10px;padding:16px;margin-top:10px">
+                  <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+                    <span style="font-size:13px">⚡</span>
+                    <strong style="font-size:13px">Deploy BTC Trend Strategy to Live</strong>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+                    <span style="background:rgba(0,248,248,0.12);color:var(--green);font-size:10px;padding:2px 8px;border-radius:4px;font-weight:600">MEDIUM</span>
+                    <span style="font-size:11px;color:var(--text-3)">⏱ Timeout</span>
+                  </div>
+                  <div style="background:#0D1118;border-radius:6px;padding:10px 12px;font-family:monospace;font-size:11px;color:var(--text-2);line-height:1.6;margin-bottom:10px">
+                    {<br>&nbsp;&nbsp;"strategy": "BTC Trend v2.1",<br>&nbsp;&nbsp;"initialPosition": "2% total",<br>&nbsp;&nbsp;"leverage": "5x",<br>&nbsp;&nbsp;"stopLossPercent": "2.7%",<br>&nbsp;&nbsp;"exchange": "BitMart"<br>}
+                  </div>
+                  <div style="display:flex;gap:8px">
+                    <span style="background:var(--green);color:#000;font-size:11px;font-weight:600;padding:5px 14px;border-radius:5px;cursor:pointer">Approve</span>
+                    <span style="border:1px solid var(--border);font-size:11px;padding:5px 14px;border-radius:5px;color:var(--text-2);cursor:pointer">Reject</span>
+                    <span style="border:1px solid var(--border);font-size:11px;padding:5px 14px;border-radius:5px;color:var(--text-2);cursor:pointer">Edit Params</span>
+                  </div>
+                </div>
+                <!-- Trading signal card -->
+                <div style="background:#161D27;border:1px solid var(--border);border-radius:10px;padding:16px;margin-top:10px">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+                    <div><strong style="font-size:14px">BTC/USDT</strong> <span style="background:rgba(16,185,129,0.15);color:#10B981;font-size:10px;padding:2px 6px;border-radius:3px;font-weight:600;margin-left:6px">LONG</span></div>
+                    <span style="font-size:11px;border:1px solid var(--border);padding:4px 10px;border-radius:5px;color:var(--text-2);cursor:pointer">One-click Follow</span>
+                  </div>
+                  <div style="font-size:11px;color:var(--text-2);margin-bottom:10px">TrendHunter · 30d PnL +18.7%</div>
+                  <div style="display:flex;gap:10px;margin-bottom:10px">
+                    <div style="flex:1;background:#0D1118;border-radius:6px;padding:10px"><div style="font-size:10px;color:var(--text-3)">Entry</div><div style="font-size:18px;font-weight:700">96,800</div></div>
+                    <div style="flex:1;background:#0D1118;border-radius:6px;padding:10px"><div style="font-size:10px;color:var(--text-3)">Stop Loss</div><div style="font-size:18px;font-weight:700">94,200</div></div>
+                    <div style="flex:1;background:#0D1118;border-radius:6px;padding:10px"><div style="font-size:10px;color:var(--text-3)">Targets</div><div style="font-size:14px;font-weight:700">99,500 / 103K / 108K</div></div>
+                  </div>
+                  <div style="display:flex;gap:16px;font-size:11px;color:var(--text-3)">
+                    <span>Confidence: <strong style="color:var(--text)">high</strong></span>
+                    <span>Status: <strong style="color:#10B981">active</strong></span>
+                    <span>📈 Trend following</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -354,7 +394,6 @@
             <div class="demo-input-box">Type a message, Enter to send, / for commands</div>
             <div class="demo-input-send">▶ Send</div>
           </div>
-          <div class="demo-footer-bar"><span>🤖 BitMart AI</span><span>© 2026 BitMart</span></div>
         </div>
       </div>
     </div>
@@ -385,15 +424,7 @@
 
   <!-- Modes section removed -->
 
-  <!-- Roadmap -->
-  <section class="rm-s" id="roadmap">
-    <div class="sh"><div class="sh-label">Roadmap</div><h2 class="sh-title">What's Next</h2></div>
-    <div class="rm-tl">
-      <div class="rm-i"><div class="rm-dot rm-a"></div><div class="rm-p">Live Now</div><div class="rm-t">Core AI Assistant</div><div class="rm-d">X Insights, knowledge base, and smart support.</div></div>
-      <div class="rm-i"><div class="rm-dot rm-n"></div><div class="rm-p">Q3 2025</div><div class="rm-t">Trading Intelligence Suite</div><div class="rm-d">Personal Analyst, Opportunity Scanner, Risk Guardian.</div></div>
-      <div class="rm-i"><div class="rm-dot rm-n"></div><div class="rm-p">Q4 2025</div><div class="rm-t">Autonomous Trading Agent</div><div class="rm-d">Automated execution and AI risk management.</div></div>
-    </div>
-  </section>
+  <!-- Roadmap removed -->
 
   <!-- CTA -->
   <section class="cta-s">
