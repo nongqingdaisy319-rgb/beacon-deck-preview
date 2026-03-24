@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BitMart Beacon — AI-Powered Trading Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --green: #00D4AA;
+      --green-dim: rgba(0,212,170,0.15);
+      --orange: #F97316;
+      --orange-dim: rgba(249,115,22,0.12);
+      --cyan: #22D3EE;
+      --bg: #000000;
+      --surface: #080B12;
+      --text: #F1F5F9;
+      --text-2: rgba(241,245,249,0.55);
+      --text-3: rgba(241,245,249,0.3);
+      --border: rgba(255,255,255,0.06);
+    }
+
+    html.lenis, html.lenis body { height: auto; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg); color: var(--text);
+      overflow-x: hidden; -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed; inset: 0 0 auto; z-index: 100;
+      height: 64px; padding: 0 max(24px, 4vw);
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background 0.3s, backdrop-filter 0.3s;
+    }
+    nav.scrolled { background: rgba(0,0,0,0.85); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+    .n-left { display: flex; align-items: center; gap: 10px; }
+    .n-logo { font-family: 'Space Grotesk'; font-size: 20px; font-weight: 700; color: var(--text); text-decoration: none; }
+    .n-tag { font-size: 11px; font-weight: 600; color: var(--green); padding: 2px 10px; border: 1px solid var(--green-dim); border-radius: 20px; }
+    .n-links { display: flex; gap: 28px; list-style: none; }
+    .n-links a { font-size: 13px; font-weight: 500; color: var(--text-2); text-decoration: none; transition: color 0.15s; }
+    .n-links a:hover { color: var(--text); }
+    .n-right { display: flex; gap: 10px; }
+    .btn-o { padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; border: 1px solid var(--border); background: none; color: var(--text-2); cursor: pointer; transition: all 0.15s; }
+    .btn-o:hover { color: var(--text); border-color: rgba(255,255,255,0.14); }
+    .btn-g { padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; border: none; background: var(--green); color: #000; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+    .btn-g:hover { background: #00E8BB; }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative; min-height: 100dvh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 80px 24px 60px; overflow: hidden;
+    }
+
+    /* Hero — title on top, giant image center, subtitle + button below */
+    .hero {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 100px 0 80px;
+      gap: 0;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      position: relative; z-index: 2;
+      text-align: center;
+      width: 100%;
+      display: flex; flex-direction: column; align-items: center;
+    }
+
+    .hero-title {
+      font-family: 'Space Grotesk';
+      font-size: clamp(52px, 8vw, 100px);
+      font-weight: 700; line-height: 1.0;
+      margin-bottom: 0;
+      padding: 0 24px;
+      text-wrap: balance;
+    }
+    .hero-title .accent {
+      color: var(--green);
+      -webkit-text-fill-color: var(--green);
+    }
+
+    /* Main hero image — BIG and prominent */
+    .hero-img-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      margin: -10px auto 0;
+      z-index: 1;
+    }
+    .hero-img-wrap img {
+      width: 100%; height: auto; display: block;
+    }
+    /* Soft edges fade to black */
+    .hero-img-wrap::after {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 55% at 50% 50%, transparent 30%, rgba(0,0,0,0.4) 65%, rgba(0,0,0,1) 90%);
+      pointer-events: none;
+    }
+
+    /* Subtitle + button area below image */
+    .hero-bottom {
+      position: relative; z-index: 2;
+      text-align: center;
+      margin-top: -60px;
+      padding: 0 24px;
+    }
+    .hero-sub {
+      font-size: 17px; line-height: 1.6; color: var(--text-2);
+      max-width: 480px; margin: 0 auto 28px;
+    }
+
+    .hb-primary {
+      padding: 16px 44px; border-radius: 100px; font-size: 16px; font-weight: 600;
+      color: #000; background: var(--green); border: none;
+      cursor: pointer; transition: all 0.2s ease-out; text-decoration: none;
+      letter-spacing: 0.3px; display: inline-flex; align-items: center; gap: 8px;
+    }
+    .hb-primary:hover { background: #00E8BB; transform: translateY(-1px); box-shadow: 0 8px 28px rgba(0,212,170,0.25); }
+
+    /* hero — clean layout */
+
+    /* ===== SECTIONS ===== */
+    section { padding: clamp(80px, 10vw, 120px) max(24px, 4vw); }
+    .sh { text-align: center; max-width: 640px; margin: 0 auto 60px; }
+    .sh-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--green); margin-bottom: 12px; }
+    .sh-title { font-family: 'Space Grotesk'; font-size: clamp(30px, 4vw, 48px); font-weight: 700; line-height: 1.1; margin-bottom: 12px; text-wrap: balance; }
+    .sh-desc { font-size: 15px; line-height: 1.7; color: var(--text-2); text-wrap: pretty; }
+
+    /* Demo */
+    .demo-s { background: linear-gradient(180deg, #000, var(--surface)); }
+    .demo-w { max-width: 960px; margin: 0 auto; }
+    .demo-box { background: #0E1420; border-radius: 14px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 32px 80px rgba(0,0,0,0.4); }
+    .demo-top { display: flex; align-items: center; gap: 6px; padding: 12px 18px; border-bottom: 1px solid var(--border); }
+    .d { width: 10px; height: 10px; border-radius: 50%; }
+    .dr { background: #EF4444; } .dy { background: #F59E0B; } .dg { background: #10B981; }
+    .demo-bd { padding: 32px; display: flex; flex-direction: column; gap: 18px; }
+    .cr { display: flex; gap: 10px; align-items: flex-start; }
+    .ca { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+    .ca-u { background: var(--orange-dim); }
+    .ca-a { background: var(--green-dim); }
+    .cb { padding: 12px 16px; border-radius: 10px; font-size: 13px; line-height: 1.6; max-width: 70%; }
+    .cb-u { background: rgba(249,115,22,0.06); border: 1px solid rgba(249,115,22,0.08); }
+    .cb-a { background: rgba(0,212,170,0.04); border: 1px solid rgba(0,212,170,0.06); }
+
+    /* Features */
+    .feat-s { background: var(--surface); }
+    .feat-g { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; max-width: 1060px; margin: 0 auto; }
+    .fc { padding: 28px; background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 12px; transition: transform 0.2s ease-out, border-color 0.2s; }
+    .fc:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.1); }
+    .fc-i { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; margin-bottom: 14px; }
+    .fc-t { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .fc-d { font-size: 13px; line-height: 1.6; color: var(--text-2); }
+
+    /* How */
+    .how-s { background: #000; }
+    .how-g { display: flex; gap: 20px; max-width: 960px; margin: 0 auto; }
+    .hc { flex: 1; text-align: center; padding: 32px 18px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); transition: transform 0.2s ease-out; }
+    .hc:hover { transform: translateY(-3px); }
+    .hc-n { width: 44px; height: 44px; border-radius: 12px; background: rgba(0,212,170,0.06); border: 1px solid rgba(0,212,170,0.12); display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk'; font-size: 18px; font-weight: 700; color: var(--green); margin: 0 auto 14px; }
+    .hc-t { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .hc-d { font-size: 13px; color: var(--text-2); line-height: 1.6; }
+
+    /* Modes */
+    .mod-s { background: var(--surface); }
+    .mod-g { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 860px; margin: 0 auto; }
+    .mc { padding: 32px; border-radius: 12px; border: 1px solid var(--border); background: rgba(255,255,255,0.02); position: relative; overflow: hidden; transition: transform 0.2s ease-out; }
+    .mc:hover { transform: translateY(-3px); }
+    .mc::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+    .mc-1::before { background: var(--green); }
+    .mc-2::before { background: var(--orange); }
+    .mc-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px; }
+    .mc-b1 { background: rgba(0,212,170,0.08); color: var(--green); }
+    .mc-b2 { background: var(--orange-dim); color: var(--orange); }
+    .mc-t { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+    .mc-d { font-size: 13px; color: var(--text-2); line-height: 1.6; margin-bottom: 16px; }
+    .mc-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    .mc-list li { font-size: 13px; color: var(--text-2); display: flex; align-items: center; gap: 6px; }
+    .mc-list li::before { content: '✓'; color: var(--green); font-weight: 700; font-size: 11px; }
+
+    /* Roadmap */
+    .rm-s { background: #000; }
+    .rm-tl { max-width: 640px; margin: 0 auto; padding-left: 28px; position: relative; }
+    .rm-tl::before { content: ''; position: absolute; left: 10px; top: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, var(--green), var(--orange-dim), transparent); }
+    .rm-i { margin-bottom: 36px; position: relative; }
+    .rm-dot { width: 20px; height: 20px; border-radius: 50%; position: absolute; left: -28px; top: 2px; }
+    .rm-a { background: rgba(0,212,170,0.12); border: 2px solid var(--green); }
+    .rm-n { background: var(--orange-dim); border: 2px solid rgba(249,115,22,0.3); }
+    .rm-p { font-size: 11px; font-weight: 600; color: var(--green); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 2px; }
+    .rm-t { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+    .rm-d { font-size: 13px; color: var(--text-2); line-height: 1.6; }
+
+    /* CTA */
+    .cta-s { background: linear-gradient(180deg, var(--surface), #000); text-align: center; }
+    .cta-w { max-width: 540px; margin: 0 auto; }
+    .cta-t { font-family: 'Space Grotesk'; font-size: clamp(32px, 4vw, 48px); font-weight: 700; margin-bottom: 14px; text-wrap: balance; }
+    .cta-d { font-size: 15px; color: var(--text-2); margin-bottom: 32px; }
+    .cta-btn { display: inline-block; padding: 14px 40px; border-radius: 10px; font-size: 15px; font-weight: 700; color: #000; background: var(--green); text-decoration: none; transition: all 0.2s ease-out; }
+    .cta-btn:hover { background: #00E8BB; transform: translateY(-1px); }
+    .accent {
+      background: linear-gradient(135deg, var(--green), var(--cyan));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    footer { padding: 32px max(24px, 4vw); border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    footer span { font-size: 12px; color: var(--text-3); }
+    footer ul { display: flex; gap: 16px; list-style: none; }
+    footer a { font-size: 12px; color: var(--text-3); text-decoration: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+    @media (max-width: 768px) {
+      .n-links { display: none; }
+      .feat-g { grid-template-columns: 1fr; }
+      .how-g { flex-direction: column; }
+      .mod-g { grid-template-columns: 1fr; }
+      .metrics { flex-direction: column; gap: 16px; }
+      .hero-btns { flex-direction: column; align-items: center; }
+      footer { flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="nav">
+    <div class="n-left"><a href="#" class="n-logo">BitMart</a><span class="n-tag">Beacon</span></div>
+    <ul class="n-links"><li><a href="#features">Features</a></li><li><a href="#demo">Demo</a></li><li><a href="#modes">Modes</a></li><li><a href="#roadmap">Roadmap</a></li></ul>
+    <div class="n-right"><button class="btn-o">Log In</button><a href="#" class="btn-g">Try Beacon →</a></div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero-content" id="hero-content">
+      <!-- Title on top -->
+      <h1 class="hero-title">
+        BitMart <span class="accent">Beacon</span>
+      </h1>
+
+      <!-- Main visual — BIG and prominent -->
+      <div class="hero-img-wrap" id="hero-img">
+        <img src="hero-visual.png" alt="BitMart Beacon" />
+      </div>
+
+      <!-- Subtitle + button below image -->
+      <div class="hero-bottom">
+        <p class="hero-sub">AI-powered market intelligence that thinks, analyzes, and trades with you.</p>
+        <a href="#" class="hb-primary">Get Started →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Demo -->
+  <section class="demo-s" id="demo">
+    <div class="sh"><div class="sh-label">Live Preview</div><h2 class="sh-title">Talk to Beacon Like a Pro</h2><p class="sh-desc">Market trends, strategies, token analysis — instant data-driven answers.</p></div>
+    <div class="demo-w"><div class="demo-box"><div class="demo-top"><span class="d dr"></span><span class="d dy"></span><span class="d dg"></span><span style="margin-left:10px;font-size:12px;color:var(--text-3)">BitMart Beacon</span></div><div class="demo-bd">
+      <div class="cr"><div class="ca ca-u">👤</div><div class="cb cb-u">What's the current sentiment for ETH?</div></div>
+      <div class="cr"><div class="ca ca-a">⚡</div><div class="cb cb-a"><strong>ETH Sentiment</strong> — <strong style="color:var(--green)">Moderately Bullish</strong><br><br>📊 Social volume +34% · 72% influencer bullish · Support at $3,200<br>⚠️ 45K ETH moved to exchanges in 6h — watch for pressure.</div></div>
+      <div class="cr"><div class="ca ca-u">👤</div><div class="cb cb-u">Should I rebalance my 60/40 ETH-stable position?</div></div>
+    </div></div></div>
+  </section>
+
+  <!-- Features -->
+  <section class="feat-s" id="features">
+    <div class="sh"><div class="sh-label">Capabilities</div><h2 class="sh-title">Everything, One Conversation Away</h2></div>
+    <div class="feat-g">
+      <div class="fc"><div class="fc-i" style="background:rgba(0,212,170,0.07)">📡</div><div class="fc-t">X Insights</div><div class="fc-d">Real-time social sentiment and trending narratives from X.</div></div>
+      <div class="fc"><div class="fc-i" style="background:rgba(99,102,241,0.07)">🧠</div><div class="fc-t">Smart Solving</div><div class="fc-d">Intelligent answers with contextual understanding.</div></div>
+      <div class="fc"><div class="fc-i" style="background:rgba(34,211,238,0.07)">📚</div><div class="fc-t">Knowledge Base</div><div class="fc-d">Crypto concepts, strategies, and market dynamics.</div></div>
+      <div class="fc"><div class="fc-i" style="background:rgba(249,115,22,0.07)">📊</div><div class="fc-t">Trading Analyst</div><div class="fc-d">Personalized insights from your history and risk profile.</div></div>
+      <div class="fc"><div class="fc-i" style="background:rgba(236,72,153,0.07)">🔍</div><div class="fc-t">Opportunity Scanner</div><div class="fc-d">Identify optimal setups across all listed pairs.</div></div>
+      <div class="fc"><div class="fc-i" style="background:rgba(234,179,8,0.07)">🛡️</div><div class="fc-t">Risk Guardian</div><div class="fc-d">Real-time alerts and protective recommendations.</div></div>
+    </div>
+  </section>
+
+  <!-- How -->
+  <section class="how-s">
+    <div class="sh"><div class="sh-label">How It Works</div><h2 class="sh-title">Start in Seconds</h2></div>
+    <div class="how-g">
+      <div class="hc"><div class="hc-n">1</div><div class="hc-t">Open Beacon</div><div class="hc-d">From your BitMart dashboard. Free for all.</div></div>
+      <div class="hc"><div class="hc-n">2</div><div class="hc-t">Ask Anything</div><div class="hc-d">Market analysis, strategy, account help.</div></div>
+      <div class="hc"><div class="hc-n">3</div><div class="hc-t">Get Insights</div><div class="hc-d">Data-driven answers with real-time intelligence.</div></div>
+    </div>
+  </section>
+
+  <!-- Modes -->
+  <section class="mod-s" id="modes">
+    <div class="sh"><div class="sh-label">Dual Modes</div><h2 class="sh-title">Choose Your Power</h2></div>
+    <div class="mod-g">
+      <div class="mc mc-1"><div class="mc-badge mc-b1">Standard</div><div class="mc-t">Standard</div><div class="mc-d">Daily checks, quick questions, general support.</div><ul class="mc-list"><li>50 queries / 4 hours</li><li>Real-time sentiment</li><li>Knowledge base</li><li>Free for all</li></ul></div>
+      <div class="mc mc-2"><div class="mc-badge mc-b2">HP</div><div class="mc-t">High-Performance</div><div class="mc-d">Advanced analytics for serious traders.</div><ul class="mc-list"><li>3 deep sessions / 4 hours</li><li>Multi-factor analysis</li><li>Cross-market correlation</li><li>Unrestricted for VIP</li></ul></div>
+    </div>
+  </section>
+
+  <!-- Roadmap -->
+  <section class="rm-s" id="roadmap">
+    <div class="sh"><div class="sh-label">Roadmap</div><h2 class="sh-title">What's Next</h2></div>
+    <div class="rm-tl">
+      <div class="rm-i"><div class="rm-dot rm-a"></div><div class="rm-p">Live Now</div><div class="rm-t">Core AI Assistant</div><div class="rm-d">X Insights, knowledge base, and smart support.</div></div>
+      <div class="rm-i"><div class="rm-dot rm-n"></div><div class="rm-p">Q3 2025</div><div class="rm-t">Trading Intelligence Suite</div><div class="rm-d">Personal Analyst, Opportunity Scanner, Risk Guardian.</div></div>
+      <div class="rm-i"><div class="rm-dot rm-n"></div><div class="rm-p">Q4 2025</div><div class="rm-t">Autonomous Trading Agent</div><div class="rm-d">Automated execution and AI risk management.</div></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-s">
+    <div class="cta-w">
+      <h2 class="cta-t">Ready to Trade <span class="accent">Smarter?</span></h2>
+      <p class="cta-d">Free for all BitMart users. Just log in and ask.</p>
+      <a href="#" class="cta-btn">Launch Beacon →</a>
+    </div>
+  </section>
+
+  <footer><span>© 2025 BitMart. All rights reserved.</span><ul><li><a href="#">Terms</a></li><li><a href="#">Privacy</a></li><li><a href="#">Docs</a></li></ul></footer>
+
+  <script>
+  // Lenis smooth scroll
+  const lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
+  function raf(t) { lenis.raf(t); requestAnimationFrame(raf); }
+  requestAnimationFrame(raf);
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add(t => lenis.raf(t * 1000));
+  gsap.ticker.lagSmoothing(0);
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Nav scroll
+  ScrollTrigger.create({ start: 'top -60', onUpdate: s => document.getElementById('nav').classList.toggle('scrolled', s.progress > 0) });
+
+  // Hero entrance
+  const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+  tl.from('.hero-title', { opacity: 0, y: 40, duration: 0.9 }, 0.2)
+    .from('#hero-img', { opacity: 0, scale: 0.9, duration: 1.4 }, 0.5)
+    .from('.hero-bottom', { opacity: 0, y: 24, duration: 0.7 }, 1.1);
+
+  // Hero parallax
+  gsap.to('#hero-img', {
+    y: 60,
+    ease: 'none',
+    scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
+  });
+
+  // Section reveals
+  gsap.utils.toArray('.sh, .demo-box, .fc, .hc, .mc, .rm-i, .cta-w').forEach(el => {
+    gsap.from(el, { opacity: 0, y: 40, duration: 0.7, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none reverse' }
+    });
+  });
+  </script>
+</body>
+</html>
