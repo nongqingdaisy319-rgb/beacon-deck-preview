@@ -137,21 +137,39 @@
     .sh-title { font-family: 'Alexandria'; font-size: clamp(30px, 4vw, 48px); font-weight: 700; line-height: 1.1; margin-bottom: 12px; text-wrap: balance; }
     .sh-desc { font-size: 15px; line-height: 1.7; color: var(--text-2); text-wrap: pretty; }
 
-    /* Demo */
+    /* Demo — Beacon Deck product UI style */
     .demo-s { background: linear-gradient(180deg, #000, var(--surface)); }
-    .demo-w { max-width: 960px; margin: 0 auto; }
-    .demo-box { background: #0E1420; border-radius: 14px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 32px 80px rgba(0,0,0,0.4); }
-    .demo-top { display: flex; align-items: center; gap: 6px; padding: 12px 18px; border-bottom: 1px solid var(--border); }
-    .d { width: 10px; height: 10px; border-radius: 50%; }
-    .dr { background: #EF4444; } .dy { background: #F59E0B; } .dg { background: #10B981; }
-    .demo-bd { padding: 32px; display: flex; flex-direction: column; gap: 18px; }
-    .cr { display: flex; gap: 10px; align-items: flex-start; }
-    .ca { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
-    .ca-u { background: var(--orange-dim); }
-    .ca-a { background: var(--green-dim); }
-    .cb { padding: 12px 16px; border-radius: 10px; font-size: 13px; line-height: 1.6; max-width: 70%; }
-    .cb-u { background: rgba(249,115,22,0.06); border: 1px solid rgba(249,115,22,0.08); }
-    .cb-a { background: rgba(0,248,248,0.04); border: 1px solid rgba(0,248,248,0.06); }
+    .demo-w { max-width: 1060px; margin: 0 auto; }
+    .demo-box { background: #111820; border-radius: 14px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 32px 80px rgba(0,0,0,0.4); display: flex; min-height: 420px; }
+    /* Left sidebar */
+    .demo-sidebar { width: 200px; background: #0D1118; border-right: 1px solid var(--border); padding: 16px 0; flex-shrink: 0; }
+    .demo-sidebar-title { font-size: 13px; font-weight: 700; color: var(--text); padding: 0 16px 12px; display: flex; align-items: center; gap: 6px; }
+    .demo-sidebar-title svg { width: 14px; height: 14px; }
+    .demo-group { padding: 0 8px; margin-bottom: 12px; }
+    .demo-group-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-3); padding: 6px 8px; }
+    .demo-channel { font-size: 12px; color: var(--text-2); padding: 6px 10px; border-radius: 6px; cursor: default; display: flex; align-items: center; gap: 6px; }
+    .demo-channel.active { background: rgba(255,255,255,0.06); color: var(--text); }
+    .demo-channel-icon { font-size: 11px; opacity: 0.5; }
+    /* Right chat area */
+    .demo-chat { flex: 1; display: flex; flex-direction: column; }
+    .demo-chat-header { padding: 12px 18px; border-bottom: 1px solid var(--border); font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+    .demo-chat-header span { color: var(--text-3); font-weight: 400; font-size: 12px; }
+    .demo-chat-body { flex: 1; padding: 20px 18px; display: flex; flex-direction: column; gap: 16px; overflow: hidden; }
+    .chat-msg { display: flex; gap: 10px; align-items: flex-start; }
+    .chat-msg-right { justify-content: flex-end; }
+    .chat-avatar { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; }
+    .chat-avatar-bot { background: rgba(0,248,248,0.12); }
+    .chat-avatar-user { background: rgba(249,115,22,0.15); }
+    .chat-bubble { padding: 10px 14px; border-radius: 10px; font-size: 13px; line-height: 1.6; max-width: 65%; }
+    .chat-bubble-bot { background: rgba(0,248,248,0.04); border: 1px solid rgba(0,248,248,0.06); }
+    .chat-bubble-user { background: var(--green); color: #000; border-radius: 10px 10px 2px 10px; }
+    .chat-name { font-size: 11px; font-weight: 600; margin-bottom: 2px; }
+    .chat-name-bot { color: var(--green); }
+    /* Input bar */
+    .demo-input { padding: 12px 18px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+    .demo-input-box { flex: 1; background: rgba(255,255,255,0.04); border: 1px solid rgba(0,248,248,0.15); border-radius: 8px; padding: 10px 14px; font-size: 13px; color: var(--text-3); }
+    .demo-input-send { background: var(--green); color: #000; border: none; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+    .demo-footer-bar { display: flex; justify-content: space-between; align-items: center; padding: 6px 18px; border-top: 1px solid var(--border); font-size: 10px; color: var(--text-3); }
 
     /* Features */
     .feat-s { background: var(--surface); }
@@ -235,7 +253,7 @@
 
   <nav id="nav">
     <div class="n-left"><a href="#" class="n-logo">BitMart</a><span class="n-tag">Beacon</span></div>
-    <ul class="n-links"><li><a href="#features">Features</a></li><li><a href="#demo">Demo</a></li><li><a href="#modes">Modes</a></li><li><a href="#roadmap">Roadmap</a></li></ul>
+    <ul class="n-links"><li><a href="#features">Features</a></li><li><a href="#demo">Demo</a></li><li><a href="#roadmap">Roadmap</a></li></ul>
     <div class="n-right"><button class="btn-o">Log In</button><a href="#" class="btn-g">Try Beacon →</a></div>
   </nav>
 
@@ -260,14 +278,53 @@
     </div>
   </section>
 
-  <!-- Demo -->
+  <!-- Demo — matches actual Beacon Deck UI -->
   <section class="demo-s" id="demo">
     <div class="sh"><div class="sh-label">Live Preview</div><h2 class="sh-title">Talk to Beacon Like a Pro</h2><p class="sh-desc">Market trends, strategies, token analysis — instant data-driven answers.</p></div>
-    <div class="demo-w"><div class="demo-box"><div class="demo-top"><span class="d dr"></span><span class="d dy"></span><span class="d dg"></span><span style="margin-left:10px;font-size:12px;color:var(--text-3)">BitMart Beacon</span></div><div class="demo-bd">
-      <div class="cr"><div class="ca ca-u">👤</div><div class="cb cb-u">What's the current sentiment for ETH?</div></div>
-      <div class="cr"><div class="ca ca-a">⚡</div><div class="cb cb-a"><strong>ETH Sentiment</strong> — <strong style="color:var(--green)">Moderately Bullish</strong><br><br>📊 Social volume +34% · 72% influencer bullish · Support at $3,200<br>⚠️ 45K ETH moved to exchanges in 6h — watch for pressure.</div></div>
-      <div class="cr"><div class="ca ca-u">👤</div><div class="cb cb-u">Should I rebalance my 60/40 ETH-stable position?</div></div>
-    </div></div></div>
+    <div class="demo-w">
+      <div class="demo-box">
+        <!-- Left sidebar -->
+        <div class="demo-sidebar">
+          <div class="demo-sidebar-title">⚡ Beacon Deck</div>
+          <div class="demo-group">
+            <div class="demo-group-label">Copy Trading</div>
+            <div class="demo-channel active"><span class="demo-channel-icon">#</span> copy trading Master</div>
+          </div>
+          <div class="demo-group">
+            <div class="demo-group-label">Grid Bot</div>
+            <div class="demo-channel"><span class="demo-channel-icon">#</span> grid strategies</div>
+          </div>
+          <div class="demo-group">
+            <div class="demo-group-label">KOL</div>
+            <div class="demo-channel"><span class="demo-channel-icon">#</span> kol insights</div>
+          </div>
+        </div>
+        <!-- Right chat -->
+        <div class="demo-chat">
+          <div class="demo-chat-header"># copy trading Master <span>· Tasks</span></div>
+          <div class="demo-chat-body">
+            <!-- User message -->
+            <div class="chat-msg chat-msg-right">
+              <div class="chat-bubble chat-bubble-user">选那个人跟单？</div>
+            </div>
+            <!-- Bot reply -->
+            <div class="chat-msg">
+              <div class="chat-avatar chat-avatar-bot">🤖</div>
+              <div>
+                <div class="chat-name chat-name-bot">openclaw <span style="background:rgba(0,248,248,0.12);color:var(--green);font-size:9px;padding:1px 5px;border-radius:3px;margin-left:4px">BOT</span></div>
+                <div class="chat-bubble chat-bubble-bot">Based on recent 30-day performance, here are the top 3 copy trading masters:<br><br>📊 <strong>TraderX</strong> — ROI +42.3%, Win rate 78%, Max DD -8.2%<br>📊 <strong>CryptoAlpha</strong> — ROI +38.7%, Win rate 82%, Max DD -5.1%<br>📊 <strong>SwingKing</strong> — ROI +35.2%, Win rate 75%, Max DD -11.4%<br><br>🏆 Recommended: <strong style="color:var(--green)">CryptoAlpha</strong> — best risk-adjusted returns with lowest max drawdown.</div>
+              </div>
+            </div>
+          </div>
+          <!-- Input bar -->
+          <div class="demo-input">
+            <div class="demo-input-box">Type a message, Enter to send, / for commands</div>
+            <div class="demo-input-send">▶ Send</div>
+          </div>
+          <div class="demo-footer-bar"><span>🤖 BitMart AI</span><span>© 2026 BitMart</span></div>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- Features -->
