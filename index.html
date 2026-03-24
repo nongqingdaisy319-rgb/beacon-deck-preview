@@ -185,10 +185,20 @@
 
     /* How */
     .how-s { background: #000; }
-    .how-g { display: flex; gap: 20px; max-width: 960px; margin: 0 auto; }
-    .hc { flex: 1; text-align: center; padding: 32px 18px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); transition: transform 0.2s ease-out; }
-    .hc:hover { transform: translateY(-3px); }
-    .hc-n { width: 44px; height: 44px; border-radius: 12px; background: rgba(0,248,248,0.06); border: 1px solid rgba(0,248,248,0.12); display: flex; align-items: center; justify-content: center; font-family: 'Alexandria'; font-size: 18px; font-weight: 700; color: var(--green); margin: 0 auto 14px; }
+    .how-g { display: flex; gap: 0; max-width: 960px; margin: 0 auto; align-items: flex-start; position: relative; }
+    .hc { flex: 1; text-align: center; padding: 32px 18px; position: relative; background: none; border: none; }
+    .hc-n { width: 44px; height: 44px; border-radius: 50%; background: rgba(0,248,248,0.08); border: 2px solid var(--green); display: flex; align-items: center; justify-content: center; font-family: 'Alexandria'; font-size: 18px; font-weight: 700; color: var(--green); margin: 0 auto 18px; position: relative; z-index: 2; }
+    /* Connector line between numbers */
+    .hc:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 54px;
+      left: calc(50% + 28px);
+      width: calc(100% - 56px);
+      height: 2px;
+      background: linear-gradient(90deg, var(--green), rgba(0,248,248,0.2));
+      z-index: 1;
+    }
     .hc-t { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
     .hc-d { font-size: 14px; color: var(--text-2); line-height: 1.6; }
 
