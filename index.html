@@ -13,8 +13,8 @@
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --green: #00D4AA;
-      --green-dim: rgba(0,212,170,0.15);
+      --green: #00F8F8;
+      --green-dim: rgba(0,248,248,0.15);
       --orange: #F97316;
       --orange-dim: rgba(249,115,22,0.12);
       --cyan: #22D3EE;
@@ -51,7 +51,7 @@
     .btn-o { padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; border: 1px solid var(--border); background: none; color: var(--text-2); cursor: pointer; transition: all 0.15s; }
     .btn-o:hover { color: var(--text); border-color: rgba(255,255,255,0.14); }
     .btn-g { padding: 8px 18px; border-radius: 8px; font-size: 13px; font-weight: 600; border: none; background: var(--green); color: #000; cursor: pointer; transition: all 0.2s; text-decoration: none; }
-    .btn-g:hover { background: #00E8BB; }
+    .btn-g:hover { background: #33FFFF; }
 
     /* ===== HERO ===== */
     .hero {
@@ -126,7 +126,7 @@
       cursor: pointer; transition: all 0.2s ease-out; text-decoration: none;
       letter-spacing: 0.3px; display: inline-flex; align-items: center; gap: 8px;
     }
-    .hb-primary:hover { background: #00E8BB; transform: translateY(-1px); box-shadow: 0 8px 28px rgba(0,212,170,0.25); }
+    .hb-primary:hover { background: #33FFFF; transform: translateY(-1px); box-shadow: 0 8px 28px rgba(0,248,248,0.25); }
 
     /* hero — clean layout */
 
@@ -151,7 +151,7 @@
     .ca-a { background: var(--green-dim); }
     .cb { padding: 12px 16px; border-radius: 10px; font-size: 13px; line-height: 1.6; max-width: 70%; }
     .cb-u { background: rgba(249,115,22,0.06); border: 1px solid rgba(249,115,22,0.08); }
-    .cb-a { background: rgba(0,212,170,0.04); border: 1px solid rgba(0,212,170,0.06); }
+    .cb-a { background: rgba(0,248,248,0.04); border: 1px solid rgba(0,248,248,0.06); }
 
     /* Features */
     .feat-s { background: var(--surface); }
@@ -167,7 +167,7 @@
     .how-g { display: flex; gap: 20px; max-width: 960px; margin: 0 auto; }
     .hc { flex: 1; text-align: center; padding: 32px 18px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); transition: transform 0.2s ease-out; }
     .hc:hover { transform: translateY(-3px); }
-    .hc-n { width: 44px; height: 44px; border-radius: 12px; background: rgba(0,212,170,0.06); border: 1px solid rgba(0,212,170,0.12); display: flex; align-items: center; justify-content: center; font-family: 'Alexandria'; font-size: 18px; font-weight: 700; color: var(--green); margin: 0 auto 14px; }
+    .hc-n { width: 44px; height: 44px; border-radius: 12px; background: rgba(0,248,248,0.06); border: 1px solid rgba(0,248,248,0.12); display: flex; align-items: center; justify-content: center; font-family: 'Alexandria'; font-size: 18px; font-weight: 700; color: var(--green); margin: 0 auto 14px; }
     .hc-t { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
     .hc-d { font-size: 13px; color: var(--text-2); line-height: 1.6; }
 
@@ -180,7 +180,7 @@
     .mc-1::before { background: var(--green); }
     .mc-2::before { background: var(--orange); }
     .mc-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px; }
-    .mc-b1 { background: rgba(0,212,170,0.08); color: var(--green); }
+    .mc-b1 { background: rgba(0,248,248,0.08); color: var(--green); }
     .mc-b2 { background: var(--orange-dim); color: var(--orange); }
     .mc-t { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
     .mc-d { font-size: 13px; color: var(--text-2); line-height: 1.6; margin-bottom: 16px; }
@@ -194,7 +194,7 @@
     .rm-tl::before { content: ''; position: absolute; left: 10px; top: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, var(--green), var(--orange-dim), transparent); }
     .rm-i { margin-bottom: 36px; position: relative; }
     .rm-dot { width: 20px; height: 20px; border-radius: 50%; position: absolute; left: -28px; top: 2px; }
-    .rm-a { background: rgba(0,212,170,0.12); border: 2px solid var(--green); }
+    .rm-a { background: rgba(0,248,248,0.12); border: 2px solid var(--green); }
     .rm-n { background: var(--orange-dim); border: 2px solid rgba(249,115,22,0.3); }
     .rm-p { font-size: 11px; font-weight: 600; color: var(--green); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 2px; }
     .rm-t { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
@@ -206,7 +206,7 @@
     .cta-t { font-family: 'Alexandria'; font-size: clamp(32px, 4vw, 48px); font-weight: 700; margin-bottom: 14px; text-wrap: balance; }
     .cta-d { font-size: 15px; color: var(--text-2); margin-bottom: 32px; }
     .cta-btn { display: inline-block; padding: 14px 40px; border-radius: 10px; font-size: 15px; font-weight: 700; color: #000; background: var(--green); text-decoration: none; transition: all 0.2s ease-out; }
-    .cta-btn:hover { background: #00E8BB; transform: translateY(-1px); }
+    .cta-btn:hover { background: #33FFFF; transform: translateY(-1px); }
     .accent {
       background: linear-gradient(135deg, var(--green), var(--cyan));
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
@@ -274,7 +274,7 @@
   <section class="feat-s" id="features">
     <div class="sh"><div class="sh-label">Capabilities</div><h2 class="sh-title">Everything, One Conversation Away</h2></div>
     <div class="feat-g">
-      <div class="fc"><div class="fc-i" style="background:rgba(0,212,170,0.07)">📡</div><div class="fc-t">X Insights</div><div class="fc-d">Real-time social sentiment and trending narratives from X.</div></div>
+      <div class="fc"><div class="fc-i" style="background:rgba(0,248,248,0.07)">📡</div><div class="fc-t">X Insights</div><div class="fc-d">Real-time social sentiment and trending narratives from X.</div></div>
       <div class="fc"><div class="fc-i" style="background:rgba(99,102,241,0.07)">🧠</div><div class="fc-t">Smart Solving</div><div class="fc-d">Intelligent answers with contextual understanding.</div></div>
       <div class="fc"><div class="fc-i" style="background:rgba(34,211,238,0.07)">📚</div><div class="fc-t">Knowledge Base</div><div class="fc-d">Crypto concepts, strategies, and market dynamics.</div></div>
       <div class="fc"><div class="fc-i" style="background:rgba(249,115,22,0.07)">📊</div><div class="fc-t">Trading Analyst</div><div class="fc-d">Personalized insights from your history and risk profile.</div></div>
