@@ -103,7 +103,8 @@
       margin: -60px auto 0;
       z-index: 1;
     }
-    .hero-img-wrap img {
+    .hero-img-wrap img,
+    .hero-img-wrap video {
       width: 100%; height: auto; display: block;
       will-change: transform;
     }
@@ -289,7 +290,9 @@
 
       <!-- Main visual — static -->
       <div class="hero-img-wrap" id="hero-img">
-        <img src="hero-visual.png" alt="BitMart Beacon" />
+        <video autoplay muted loop playsinline preload="auto" aria-label="BitMart Beacon animation">
+          <source src="hero-animation.mov" type="video/quicktime" />
+        </video>
       </div>
 
       <!-- Subtitle + button below image -->
