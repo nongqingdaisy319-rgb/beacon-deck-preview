@@ -149,24 +149,24 @@
     /* Demo — Beacon Deck product UI style */
     .demo-s { background: linear-gradient(180deg, #000, var(--surface)); }
     .demo-w { max-width: 1200px; margin: 0 auto; }
-    .demo-box { background: #111820; border-radius: 14px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 32px 80px rgba(0,0,0,0.4); display: flex; min-height: 420px; }
+    .demo-box { background: #111820; border-radius: 14px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 32px 80px rgba(0,0,0,0.4); display: flex; min-height: 340px; }
     /* Left sidebar */
-    .demo-sidebar { width: 200px; background: #0D1118; border-right: 1px solid var(--border); padding: 16px 0; flex-shrink: 0; }
-    .demo-sidebar-title { font-size: 14px; font-weight: 700; color: var(--text); padding: 0 16px 12px; display: flex; align-items: center; gap: 6px; }
+    .demo-sidebar { width: 168px; background: #0D1118; border-right: 1px solid var(--border); padding: 10px 0; flex-shrink: 0; }
+    .demo-sidebar-title { font-size: 12px; font-weight: 700; color: var(--text); padding: 0 12px 8px; display: flex; align-items: center; gap: 6px; }
     .demo-sidebar-title svg { width: 14px; height: 14px; }
-    .demo-group { padding: 0 8px; margin-bottom: 12px; }
-    .demo-group-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-3); padding: 6px 8px; }
-    .demo-channel { font-size: 12px; color: var(--text-2); padding: 6px 10px; border-radius: 6px; cursor: default; display: flex; align-items: center; gap: 6px; }
+    .demo-group { padding: 0 6px; margin-bottom: 8px; }
+    .demo-group-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-3); padding: 4px 6px; }
+    .demo-channel { font-size: 11px; color: var(--text-2); padding: 5px 8px; border-radius: 6px; cursor: default; display: flex; align-items: center; gap: 6px; }
     .demo-channel.active { background: rgba(255,255,255,0.06); color: var(--text); }
     .demo-channel-icon { font-size: 12px; opacity: 0.5; }
     /* Right chat area */
     .demo-chat { flex: 1; display: flex; flex-direction: column; }
-    .demo-chat-header { padding: 12px 18px; border-bottom: 1px solid var(--border); font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
-    .demo-chat-header span { color: var(--text-3); font-weight: 400; font-size: 12px; }
-    .demo-chat-body { flex: 1; padding: 20px 18px; display: flex; flex-direction: column; gap: 16px; overflow: hidden; }
+    .demo-chat-header { padding: 10px 14px; border-bottom: 1px solid var(--border); font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+    .demo-chat-header span { color: var(--text-3); font-weight: 400; font-size: 10px; }
+    .demo-chat-body { flex: 1; padding: 14px 14px; display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
     .chat-msg { display: flex; gap: 10px; align-items: flex-start; }
     .chat-msg-right { justify-content: flex-end; }
-    .chat-avatar { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; }
+    .chat-avatar { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0; }
     .chat-avatar-bot { background: rgba(0,248,248,0.12); }
     .chat-avatar-user { background: rgba(249,115,22,0.15); }
     .chat-bubble { padding: 10px 14px; border-radius: 10px; font-size: 14px; line-height: 1.6; max-width: 65%; }
@@ -175,9 +175,9 @@
     .chat-name { font-size: 12px; font-weight: 600; margin-bottom: 2px; }
     .chat-name-bot { color: var(--green); }
     /* Input bar */
-    .demo-input { padding: 12px 18px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 10px; }
-    .demo-input-box { flex: 1; background: rgba(255,255,255,0.04); border: 1px solid rgba(0,248,248,0.15); border-radius: 8px; padding: 10px 14px; font-size: 14px; color: var(--text-3); }
-    .demo-input-send { background: var(--green); color: #000; border: none; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+    .demo-input { padding: 10px 14px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+    .demo-input-box { flex: 1; background: rgba(255,255,255,0.04); border: 1px solid rgba(0,248,248,0.15); border-radius: 8px; padding: 8px 12px; font-size: 12px; color: var(--text-3); }
+    .demo-input-send { background: var(--green); color: #000; border: none; padding: 7px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px; }
     .demo-footer-bar { display: flex; justify-content: space-between; align-items: center; padding: 6px 18px; border-top: 1px solid var(--border); font-size: 10px; color: var(--text-3); }
 
     /* Features */
@@ -328,49 +328,47 @@
               <div style="flex:1;max-width:80%">
                 <div class="chat-name chat-name-bot" translate="no">Beacon Alpha <span style="background:rgba(0,248,248,0.12);color:var(--green);font-size:9px;padding:1px 5px;border-radius:3px;margin-left:4px">BOT</span></div>
                 <!-- Backtest card -->
-                <div style="background:#161D27;border:1px solid var(--border);border-radius:10px;padding:16px;margin-top:6px">
+                <div style="background:#161D27;border:1px solid var(--border);border-radius:10px;padding:12px;margin-top:4px">
                   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
                     <strong style="font-size:14px">BTC Trend Strategy — 2026 Q1 Backtest</strong>
                     <span style="font-size:11px;cursor:pointer">↗</span>
                   </div>
-                  <div style="font-size:12px;color:var(--text-2);margin-bottom:12px">Q1 Total Return +47.3%, Max DD -12.8%, Sharpe 2.14, Suggested 2% position</div>
-                  <div style="display:inline-block;font-size:11px;border:1px solid var(--border);border-radius:5px;padding:4px 10px;color:var(--text-2)">Open in Canvas</div>
+                  <div style="font-size:12px;color:var(--text-2);margin-bottom:8px">Return +47.3%, Max DD -12.8%, Sharpe 2.14</div>
+                  <div style="display:inline-block;font-size:11px;border:1px solid var(--border);border-radius:5px;padding:3px 8px;color:var(--text-2)">Open in Canvas</div>
                 </div>
                 <!-- Deploy action card -->
-                <div style="background:#161D27;border:1px solid var(--border);border-radius:10px;padding:16px;margin-top:10px">
+                <div style="background:#161D27;border:1px solid var(--border);border-radius:10px;padding:12px;margin-top:8px">
                   <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
                     <span style="font-size:13px">⚡</span>
                     <strong style="font-size:13px">Deploy BTC Trend Strategy to Live</strong>
                   </div>
-                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
                     <span style="background:rgba(0,248,248,0.12);color:var(--green);font-size:10px;padding:2px 8px;border-radius:4px;font-weight:600">MEDIUM</span>
-                    <span style="font-size:11px;color:var(--text-3)">⏱ Timeout</span>
+                    <span style="font-size:11px;color:var(--text-3)">2% position · 5x leverage</span>
                   </div>
-                  <div style="background:#0D1118;border-radius:6px;padding:10px 12px;font-family:monospace;font-size:11px;color:var(--text-2);line-height:1.6;margin-bottom:10px">
-                    {<br>&nbsp;&nbsp;"strategy": "BTC Trend v2.1",<br>&nbsp;&nbsp;"initialPosition": "2% total",<br>&nbsp;&nbsp;"leverage": "5x",<br>&nbsp;&nbsp;"stopLossPercent": "2.7%",<br>&nbsp;&nbsp;"exchange": "BitMart"<br>}
+                  <div style="background:#0D1118;border-radius:6px;padding:8px 10px;font-family:monospace;font-size:10px;color:var(--text-2);line-height:1.5;margin-bottom:8px">
+                    {"strategy":"BTC Trend v2.1","stopLoss":"2.7%"}
                   </div>
                   <div style="display:flex;gap:8px">
-                    <span style="background:var(--green);color:#000;font-size:11px;font-weight:600;padding:5px 14px;border-radius:5px;cursor:pointer">Approve</span>
-                    <span style="border:1px solid var(--border);font-size:11px;padding:5px 14px;border-radius:5px;color:var(--text-2);cursor:pointer">Reject</span>
-                    <span style="border:1px solid var(--border);font-size:11px;padding:5px 14px;border-radius:5px;color:var(--text-2);cursor:pointer">Edit Params</span>
+                    <span style="background:var(--green);color:#000;font-size:11px;font-weight:600;padding:5px 12px;border-radius:5px;cursor:pointer">Approve</span>
+                    <span style="border:1px solid var(--border);font-size:11px;padding:5px 12px;border-radius:5px;color:var(--text-2);cursor:pointer">Edit</span>
                   </div>
                 </div>
                 <!-- Trading signal card -->
-                <div style="background:#161D27;border:1px solid var(--border);border-radius:10px;padding:16px;margin-top:10px">
+                <div style="background:#161D27;border:1px solid var(--border);border-radius:10px;padding:12px;margin-top:8px">
                   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
                     <div><strong style="font-size:14px">BTC/USDT</strong> <span style="background:rgba(16,185,129,0.15);color:#10B981;font-size:10px;padding:2px 6px;border-radius:3px;font-weight:600;margin-left:6px">LONG</span></div>
                     <span style="font-size:11px;border:1px solid var(--border);padding:4px 10px;border-radius:5px;color:var(--text-2);cursor:pointer">One-click Follow</span>
                   </div>
-                  <div style="font-size:11px;color:var(--text-2);margin-bottom:10px">TrendHunter · 30d PnL +18.7%</div>
-                  <div style="display:flex;gap:10px;margin-bottom:10px">
-                    <div style="flex:1;background:#0D1118;border-radius:6px;padding:10px"><div style="font-size:10px;color:var(--text-3)">Entry</div><div style="font-size:18px;font-weight:700">96,800</div></div>
-                    <div style="flex:1;background:#0D1118;border-radius:6px;padding:10px"><div style="font-size:10px;color:var(--text-3)">Stop Loss</div><div style="font-size:18px;font-weight:700">94,200</div></div>
-                    <div style="flex:1;background:#0D1118;border-radius:6px;padding:10px"><div style="font-size:10px;color:var(--text-3)">Targets</div><div style="font-size:14px;font-weight:700">99,500 / 103K / 108K</div></div>
+                  <div style="font-size:11px;color:var(--text-2);margin-bottom:8px">TrendHunter · 30d PnL +18.7%</div>
+                  <div style="display:flex;gap:8px;margin-bottom:8px">
+                    <div style="flex:1;background:#0D1118;border-radius:6px;padding:8px"><div style="font-size:10px;color:var(--text-3)">Entry</div><div style="font-size:16px;font-weight:700">96,800</div></div>
+                    <div style="flex:1;background:#0D1118;border-radius:6px;padding:8px"><div style="font-size:10px;color:var(--text-3)">Stop</div><div style="font-size:16px;font-weight:700">94,200</div></div>
+                    <div style="flex:1;background:#0D1118;border-radius:6px;padding:8px"><div style="font-size:10px;color:var(--text-3)">Target</div><div style="font-size:13px;font-weight:700">99.5K / 103K</div></div>
                   </div>
-                  <div style="display:flex;gap:16px;font-size:11px;color:var(--text-3)">
+                  <div style="display:flex;gap:12px;font-size:11px;color:var(--text-3)">
                     <span>Confidence: <strong style="color:var(--text)">high</strong></span>
                     <span>Status: <strong style="color:#10B981">active</strong></span>
-                    <span>📈 Trend following</span>
                   </div>
                 </div>
               </div>
