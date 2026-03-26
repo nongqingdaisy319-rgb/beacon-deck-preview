@@ -108,6 +108,14 @@
       width: 100%; height: auto; display: block;
       will-change: transform;
     }
+    .hero-poster { position: relative; z-index: 1; }
+    .hero-video {
+      position: absolute; inset: 0;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      z-index: 2;
+    }
+    .hero-video.is-ready { opacity: 1; }
     /* Soft edges fade to black */
     .hero-img-wrap::after {
       content: '';
@@ -290,10 +298,8 @@
 
       <!-- Main visual — static -->
       <div class="hero-img-wrap" id="hero-img">
-        <video autoplay muted loop playsinline preload="auto" poster="hero-visual.png" aria-label="BitMart Beacon animation">
-          <source src="hero-animation-loop.mp4" type="video/mp4" />
-          <source src="hero-animation.mov" type="video/quicktime" />
-          <img src="hero-visual.png" alt="BitMart Beacon" />
+        <img class="hero-poster" src="hero-visual.png" alt="BitMart Beacon" />
+        <video id="hero-video" class="hero-video" muted loop playsinline preload="none" poster="hero-visual.png" aria-label="BitMart Beacon animation">
         </video>
       </div>
 
@@ -442,7 +448,24 @@
   // Nav scroll
   ScrollTrigger.create({ start: 'top -60', onUpdate: s => document.getElementById('nav').classList.toggle('scrolled', s.progress > 0) });
 
-  // Static hero — no animation on hero image
+  // Hero video: show poster first, lazy-load video after first paint
+  const heroVideo = document.getElementById('hero-video');
+  const loadHeroVideo = () => {
+    if (!heroVideo || heroVideo.dataset.loaded === '1') return;
+    heroVideo.dataset.loaded = '1';
+    heroVideo.innerHTML = '<source src="hero-animation-loop.mp4" type="video/mp4" /><source src="hero-animation.mov" type="video/quicktime" />';
+    heroVideo.load();
+    const onReady = () => {
+      heroVideo.classList.add('is-ready');
+      heroVideo.play().catch(() => {});
+    };
+    heroVideo.addEventListener('canplay', onReady, { once: true });
+  };
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(() => setTimeout(loadHeroVideo, 200), { timeout: 1200 });
+  } else {
+    setTimeout(loadHeroVideo, 300);
+  }
 
   // Section reveals
   gsap.utils.toArray('.sh, .demo-box, .fc, .hc, .mc, .rm-i, .cta-w').forEach(el => {
