@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google" content="notranslate">
+  <title>BitMart Beacon — AI-Powered Trading Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --green: #00F8F8;
+      --green-dim: rgba(0,248,248,0.15);
+      --orange: #F97316;
+      --orange-dim: rgba(249,115,22,0.12);
+      --cyan: #22D3EE;
+      --bg: #000000;
+      --surface: #080B12;
+      --text: #F1F5F9;
+      --text-2: rgba(241,245,249,0.55);
+      --text-3: rgba(241,245,249,0.3);
+      --border: rgba(255,255,255,0.06);
+    }
+
+    html.lenis, html.lenis body { height: auto; }
+    body {
+      font-family: 'Alexandria', system-ui, sans-serif;
+      background: var(--bg); color: var(--text);
+      overflow-x: hidden; -webkit-font-smoothing: antialiased;
+    }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed; inset: 0 0 auto; z-index: 100;
+      height: 64px; padding: 0 max(24px, 4vw);
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background 0.3s, backdrop-filter 0.3s;
+    }
+    nav.scrolled { background: rgba(0,0,0,0.85); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border); }
+    .n-left { display: flex; align-items: center; gap: 10px; }
+    .n-logo { display: inline-flex; align-items: center; text-decoration: none; }
+    .n-logo img { height: 32px; width: auto; display: block; object-fit: contain; }
+    .n-tag { display: none; }
+    .n-links { display: flex; gap: 28px; list-style: none; }
+    .n-links a { font-size: 14px; font-weight: 500; color: var(--text-2); text-decoration: none; transition: color 0.15s; }
+    .n-links a:hover { color: var(--text); }
+    .n-right { display: flex; gap: 10px; }
+    .btn-o { padding: 8px 18px; border-radius: 100px; font-size: 14px; font-weight: 600; border: 1px solid var(--border); background: none; color: var(--text-2); cursor: pointer; transition: all 0.15s; }
+    .btn-o:hover { color: var(--text); border-color: rgba(255,255,255,0.14); }
+    .btn-g { padding: 8px 18px; border-radius: 100px; font-size: 14px; font-weight: 600; border: none; background: var(--green); color: #000; cursor: pointer; transition: all 0.2s; text-decoration: none; }
+    .btn-g:hover { background: #0ad0d0; }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative; min-height: 100dvh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 80px 24px 60px; overflow: hidden;
+    }
+
+    /* Hero — logo style: image top, title below, subtitle, button */
+    .hero {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 60px 24px 40px;
+      gap: 0;
+      overflow: hidden;
+    }
+
+    .hero-content {
+      position: relative; z-index: 2;
+      text-align: center;
+      width: 100%; max-width: 1200px;
+      margin: 0 auto;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 0;
+    }
+
+    .hero-headline-block {
+      position: relative;
+      z-index: 3;
+      margin-top: 24px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .hero-title {
+      font-family: 'Alexandria';
+      font-size: clamp(20px, 4vw, 72px);
+      font-weight: 700; line-height: 1.0;
+      margin-bottom: 12px;
+      padding: 0 24px;
+      white-space: nowrap;
+    }
+    .hero-title .accent {
+      background: linear-gradient(90deg, #01E0E0, #FF37C0);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Main hero image — BIG, prominent, animated */
+    .hero-img-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+      z-index: 1;
+    }
+    .hero-img-wrap img,
+    .hero-img-wrap video {
+      width: 100%; height: auto; display: block;
+      will-change: transform;
+    }
+    .hero-poster { position: relative; z-index: 1; }
+    .hero-video {
+      position: absolute; inset: 0;
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      z-index: 2;
+    }
+    .hero-video.is-ready { opacity: 1; }
+    /* Soft edges fade to black */
+    .hero-img-wrap::after {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 55% at 50% 50%, transparent 30%, rgba(0,0,0,0.4) 65%, rgba(0,0,0,1) 90%);
+      pointer-events: none;
+    }
+    /* Static hero — no animation */
+
+    /* Subtitle + button area below image */
+    .hero-bottom {
+      position: relative; z-index: 2;
+      text-align: center;
+      margin-top: 16px;
+      padding: 0 24px;
+    }
+    .hero-sub {
+      font-size: 18px; line-height: 1.6; color: var(--text-2);
+      max-width: 480px; margin: 0 auto 28px;
+    }
+
+    .hb-primary {
+      padding: 16px 44px; border-radius: 100px; font-size: 16px; font-weight: 600;
+      color: #000; background: var(--green); border: none;
+      cursor: pointer; transition: all 0.2s ease-out; text-decoration: none;
+      letter-spacing: 0.3px; display: inline-flex; align-items: center; gap: 8px;
+    }
+    .hb-primary:hover { background: #0ad0d0; transform: translateY(-1px); box-shadow: 0 8px 28px rgba(10,208,208,0.25); }
+
+    /* hero — clean layout */
+
+    /* ===== SECTIONS ===== */
+    section { padding: clamp(80px, 10vw, 120px) max(24px, 4vw); }
+    .sec-inner { max-width: 1200px; margin: 0 auto; }
+    .sh { text-align: center; max-width: 640px; margin: 0 auto 60px; }
+    .sh-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--green); margin-bottom: 12px; }
+    .sh-title { font-family: 'Alexandria'; font-size: clamp(20px, 3vw, 40px); font-weight: 700; line-height: 1.5; margin-bottom: 12px; white-space: nowrap; }
+    .sh-desc { font-size: 16px; line-height: 1.7; color: var(--text-2); white-space: nowrap; max-width: none; }
+
+    /* Demo — Beacon Deck product UI style */
+    .demo-s { background: linear-gradient(180deg, #000, var(--surface)); }
+    .demo-w { max-width: 1200px; margin: 0 auto; }
+    .demo-box { background: #111820; border-radius: 14px; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 32px 80px rgba(0,0,0,0.4); display: flex; min-height: 340px; }
+    /* Left sidebar */
+    .demo-sidebar { width: 168px; background: #0D1118; border-right: 1px solid var(--border); padding: 10px 0; flex-shrink: 0; }
+    .demo-sidebar-title { font-size: 12px; font-weight: 700; color: var(--text); padding: 0 12px 8px; display: flex; align-items: center; gap: 6px; }
+    .demo-sidebar-title svg { width: 14px; height: 14px; }
+    .demo-group { padding: 0 6px; margin-bottom: 8px; }
+    .demo-group-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-3); padding: 4px 6px; }
+    .demo-channel { font-size: 11px; color: var(--text-2); padding: 5px 8px; border-radius: 6px; cursor: default; display: flex; align-items: center; gap: 6px; }
+    .demo-channel.active { background: rgba(255,255,255,0.06); color: var(--text); }
+    .demo-channel-icon { font-size: 12px; opacity: 0.5; }
+    /* Right chat area */
+    .demo-chat { flex: 1; display: flex; flex-direction: column; }
+    .demo-chat-header { padding: 10px 14px; border-bottom: 1px solid var(--border); font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px; }
+    .demo-chat-header span { color: var(--text-3); font-weight: 400; font-size: 10px; }
+    .demo-chat-body { flex: 1; padding: 14px 14px; display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
+    .chat-msg { display: flex; gap: 10px; align-items: flex-start; }
+    .chat-msg-right { justify-content: flex-end; }
+    .chat-avatar { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; flex-shrink: 0; }
+    .chat-avatar-bot { background: rgba(0,248,248,0.12); }
+    .chat-avatar-user { background: rgba(249,115,22,0.15); }
+    .chat-bubble { padding: 10px 14px; border-radius: 10px; font-size: 14px; line-height: 1.6; max-width: 65%; }
+    .chat-bubble-bot { background: rgba(0,248,248,0.04); border: 1px solid rgba(0,248,248,0.06); }
+    .chat-bubble-user { background: var(--green); color: #000; border-radius: 10px 10px 2px 10px; }
+    .chat-name { font-size: 12px; font-weight: 600; margin-bottom: 2px; }
+    .chat-name-bot { color: var(--green); }
+    /* Input bar */
+    .demo-input { padding: 10px 14px; border-top: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+    .demo-input-box { flex: 1; background: rgba(255,255,255,0.04); border: 1px solid rgba(0,248,248,0.15); border-radius: 8px; padding: 8px 12px; font-size: 12px; color: var(--text-3); }
+    .demo-input-send { background: var(--green); color: #000; border: none; padding: 7px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px; }
+    .demo-input-send:hover { background: #0ad0d0; }
+    .demo-footer-bar { display: flex; justify-content: space-between; align-items: center; padding: 6px 18px; border-top: 1px solid var(--border); font-size: 10px; color: var(--text-3); }
+
+    /* Features */
+    .feat-s { background: var(--surface); }
+    .feat-g { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; max-width: 1200px; margin: 0 auto; }
+    .fc { padding: 28px; background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 12px; transition: transform 0.2s ease-out, border-color 0.2s; }
+    .fc:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.1); }
+    .fc-i { font-size: 28px; margin-bottom: 14px; background: none !important; }
+    .fc-t { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .fc-d { font-size: 14px; line-height: 1.6; color: var(--text-2); }
+
+    /* How */
+    .how-s { background: #000; }
+    .how-g { display: flex; gap: 0; max-width: 1200px; margin: 0 auto; align-items: flex-start; position: relative; }
+    .hc { flex: 1; text-align: center; padding: 32px 18px; position: relative; background: none; border: none; }
+    .hc-n { width: 44px; height: 44px; border-radius: 50%; background: transparent; border: 1px solid #2C2F32; display: flex; align-items: center; justify-content: center; font-family: 'Alexandria'; font-size: 18px; font-weight: 700; color: #ffffff; margin: 0 auto 18px; position: relative; z-index: 2; }
+    /* Connector line between numbers */
+    .hc:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 54px;
+      left: calc(50% + 28px);
+      width: calc(100% - 56px);
+      height: 1px;
+      background: #2C2F32;
+      z-index: 1;
+    }
+    .hc-t { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+    .hc-d { font-size: 14px; color: var(--text-2); line-height: 1.6; }
+
+    /* Modes */
+    .mod-s { background: var(--surface); }
+    .mod-g { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 860px; margin: 0 auto; }
+    .mc { padding: 32px; border-radius: 12px; border: 1px solid var(--border); background: rgba(255,255,255,0.02); position: relative; overflow: hidden; transition: transform 0.2s ease-out; }
+    .mc:hover { transform: translateY(-3px); }
+    .mc::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+    .mc-1::before { background: var(--green); }
+    .mc-2::before { background: var(--orange); }
+    .mc-badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 14px; }
+    .mc-b1 { background: rgba(0,248,248,0.08); color: var(--green); }
+    .mc-b2 { background: var(--orange-dim); color: var(--orange); }
+    .mc-t { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+    .mc-d { font-size: 14px; color: var(--text-2); line-height: 1.6; margin-bottom: 16px; }
+    .mc-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    .mc-list li { font-size: 14px; color: var(--text-2); display: flex; align-items: center; gap: 6px; }
+    .mc-list li::before { content: '✓'; color: var(--green); font-weight: 700; font-size: 12px; }
+
+    /* Roadmap */
+    .rm-s { background: #000; }
+    .rm-tl { max-width: 640px; margin: 0 auto; padding-left: 28px; position: relative; }
+    .rm-tl::before { content: ''; position: absolute; left: 10px; top: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, var(--green), var(--orange-dim), transparent); }
+    .rm-i { margin-bottom: 36px; position: relative; }
+    .rm-dot { width: 20px; height: 20px; border-radius: 50%; position: absolute; left: -28px; top: 2px; }
+    .rm-a { background: rgba(0,248,248,0.12); border: 2px solid var(--green); }
+    .rm-n { background: var(--orange-dim); border: 2px solid rgba(249,115,22,0.3); }
+    .rm-p { font-size: 12px; font-weight: 600; color: var(--green); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 2px; }
+    .rm-t { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+    .rm-d { font-size: 14px; color: var(--text-2); line-height: 1.6; }
+
+    /* CTA */
+    .cta-s { background: linear-gradient(180deg, var(--surface), rgba(0,248,248,0.1) 60%, rgba(0,248,248,0) 100%); text-align: center; }
+    .cta-w { max-width: 540px; margin: 0 auto; display: flex; flex-direction: column; align-items: center; text-align: center; }
+    .cta-t { font-family: 'Alexandria'; font-size: clamp(32px, 4vw, 48px); font-weight: 700; margin-bottom: 14px; white-space: nowrap; }
+    .cta-d { font-size: 16px; color: var(--text-2); margin-bottom: 32px; }
+    .cta-btn { display: inline-block; padding: 14px 40px; border-radius: 100px; font-size: 16px; font-weight: 700; color: #000; background: var(--green); text-decoration: none; transition: all 0.2s ease-out; margin: 0 auto; }
+    .cta-btn:hover { background: #0ad0d0; transform: translateY(-1px); }
+    .accent {
+      background: linear-gradient(135deg, var(--green), var(--cyan));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    footer { padding: 32px max(24px, 4vw); border-top: 1px solid var(--border); }
+    .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; justify-content: center; align-items: center; text-align: center; }
+    footer span { font-size: 12px; color: #787878; }
+    footer ul { display: flex; gap: 16px; list-style: none; }
+    footer a { font-size: 12px; color: #787878; text-decoration: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+    @media (max-width: 768px) {
+      .n-links { display: none; }
+      .feat-g { grid-template-columns: 1fr; }
+      .how-g { flex-direction: column; }
+      .mod-g { grid-template-columns: 1fr; }
+      .metrics { flex-direction: column; gap: 16px; }
+      .hero-btns { flex-direction: column; align-items: center; }
+      footer { flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="nav">
+    <div class="n-left" style="display:flex;align-items:center;gap:10px;">
+      <a href="https://www.bitmart.com" target="_blank" style="display:flex;align-items:center;text-decoration:none;gap:8px" translate="no">
+        <svg width="22" height="26" viewBox="0 0 22 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M13.9297 18.0475H5.96861V18.7231H13.9297V18.0475Z" fill="#F3F3F3"/>
+          <path d="M7.96111 22.2502H1.98954V22.9259H7.96111V22.2502Z" fill="#F3F3F3"/>
+          <path d="M3.97319 18.0503H0V18.7259H3.97319V18.0503Z" fill="#F3F3F3"/>
+          <path d="M13.9297 16.0951H7.95817V16.7707H13.9297V16.0951Z" fill="#F3F3F3"/>
+          <path d="M5.96272 16.0951H1.99249V16.7707H5.96272V16.0951Z" fill="#F3F3F3"/>
+          <path d="M13.9297 7.36047H3.97613V8.03611H13.9297V7.36047Z" fill="#F3F3F3"/>
+          <path d="M5.96273 5.11304H1.98954V5.78867H5.96273V5.11304Z" fill="#F3F3F3"/>
+          <path d="M19.2086 11.6089V11.5917C19.9019 10.4157 20.2652 9.08351 20.2624 7.72834C20.2596 6.37317 19.8907 5.04245 19.1926 3.86913C18.4944 2.6958 17.4915 1.72096 16.284 1.04201C15.0766 0.363049 13.7068 0.00374727 12.3116 0H3.97613V0.967648H12.3352C13.4059 0.971767 14.4613 1.21541 15.4194 1.67969C16.3775 2.14396 17.2126 2.81638 17.86 3.64478C18.5074 4.47319 18.9496 5.43531 19.1523 6.45651C19.355 7.47771 19.3127 8.53055 19.0288 9.53334C19.2368 8.66592 19.2406 7.76411 19.0399 6.89508C18.8393 6.02604 18.4394 5.21218 17.8699 4.5141C17.3005 3.81602 16.5763 3.25171 15.7512 2.86321C14.9261 2.47471 14.0214 2.27202 13.1044 2.27025H5.96862V3.2379H13.1133C13.9139 3.23816 14.7032 3.42186 15.417 3.77405C16.1308 4.12625 16.749 4.63703 17.2214 5.26488C17.6938 5.89274 18.007 6.61997 18.1357 7.3875C18.2643 8.15503 18.2048 8.94122 17.9619 9.68221C18.1181 9.11051 18.1374 8.51167 18.0183 7.9316C17.8993 7.35153 17.6451 6.80564 17.2752 6.3358C16.9053 5.86595 16.4295 5.48463 15.8843 5.22107C15.3392 4.95751 14.7391 4.81872 14.1302 4.81534H7.94048V5.79157H14.1007C14.6239 5.79252 15.1377 5.92657 15.5909 6.1804C16.0441 6.43422 16.421 6.79894 16.684 7.23825C16.947 7.67756 17.0868 8.17612 17.0897 8.68428C17.0926 9.19243 16.9583 9.69245 16.7003 10.1345C15.81 9.81297 14.8678 9.64816 13.9179 9.64785H5.95978V10.6155H13.9179C15.5413 10.6157 17.1137 11.166 18.3641 12.1715C19.6145 13.177 20.4646 14.5747 20.7679 16.1236C20.4653 14.8443 19.7253 13.7023 18.6687 12.8839C17.612 12.0656 16.301 11.6191 14.9496 11.6175H3.97319V12.5766H14.9643C16.1579 12.5805 17.3102 13.001 18.2111 13.7615C19.112 14.522 19.7014 15.5717 19.8718 16.7191C19.7038 15.8302 19.2206 15.0266 18.5061 14.4477C17.7916 13.8688 16.891 13.5511 15.9605 13.5499H3.97908V14.5176H15.9576C16.7495 14.5176 17.5089 14.8231 18.0689 15.367C18.6288 15.9109 18.9434 16.6485 18.9434 17.4177C18.9434 18.1868 18.6288 18.9245 18.0689 19.4683C17.5089 20.0122 16.7495 20.3177 15.9576 20.3177H1.98954V21.2854H15.9605C16.891 21.2842 17.7916 20.9666 18.5061 20.3877C19.2206 19.8087 19.7038 19.0051 19.8718 18.1162C19.6991 19.2645 19.1067 20.3141 18.203 21.0731C17.2992 21.8322 16.1443 22.25 14.9496 22.2502H9.93886V23.2178H14.9496C16.2475 23.2161 17.5096 22.8043 18.5453 22.0446C19.5811 21.2849 20.3343 20.2186 20.6912 19.0066C20.3182 20.4748 19.4503 21.7798 18.2256 22.7136C17.0008 23.6474 15.4897 24.1565 13.9327 24.1597H3.98792V25.1274H13.9179C15.5373 25.1349 17.1205 24.6625 18.4562 23.7731C19.7918 22.8838 20.8163 21.6198 21.3929 20.15C21.9695 18.6802 22.0707 17.0745 21.6831 15.5473C21.2954 14.0201 20.4373 12.6442 19.2234 11.6032L19.2086 11.6089Z" fill="#F3F3F3"/>
+        </svg>
+        <span style="font-family:'Alexandria';font-size:16px;font-weight:600;color:#F3F3F3" translate="no">BitMart AI</span>
+      </a>
+    </div>
+    <div class="n-right"><a href="https://ai.bmexchangeaws-test.com/app/login" class="btn-g" translate="no" target="_blank">立即体验</a></div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
+    <div class="hero-content" id="hero-content">
+      <!-- Main headline -->
+      <!-- Main visual — top -->
+      <div class="hero-img-wrap" id="hero-img">
+        <img class="hero-poster" src="hero-visual.png" alt="BitMart Beacon" />
+        <video id="hero-video" class="hero-video" muted loop playsinline preload="none" poster="hero-visual.png" aria-label="BitMart Beacon animation">
+        </video>
+      </div>
+
+      <!-- Title + subtitle below image -->
+      <div class="hero-headline-block">
+        <h1 class="hero-title">问 <span class="accent" translate="no">Beacon</span>，交易更聪明，赚得更多。</h1>
+        <p class="hero-sub" style="margin: 0 auto;opacity:0.6;font-size:16px"><span translate="no">OpenClaw</span> AI 助手，内置于 <span translate="no">BitMart</span>。</p>
+      </div>
+
+      <!-- Button -->
+      <div class="hero-bottom">
+        <a href="https://ai.bmexchangeaws-test.com/app/login" class="hb-primary" target="_blank" translate="no">立即体验 →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Demo — Beacon Deck product UI -->
+  <section class="demo-s" id="demo">
+    <div class="sh"><div class="sh-label">产品预览</div><h2 class="sh-title">看看 <span translate="no" style="white-space:nowrap">BitMart AI</span> 能做什么</h2><p class="sh-desc">问行情、问策略、问持仓 —— 直接在频道里问，秒出答案。</p></div>
+    <div class="demo-w">
+      <div class="demo-box">
+        <!-- Left sidebar -->
+        <div class="demo-sidebar">
+          <div class="demo-sidebar-title" translate="no">⚡ BitMart AI</div>
+          <div class="demo-group">
+            <div class="demo-group-label">Trading</div>
+            <div class="demo-channel active"><span class="demo-channel-icon">#</span> Strategy Discussion <span style="background:rgba(0,248,248,0.15);color:var(--green);font-size:9px;padding:1px 5px;border-radius:3px;margin-left:auto">3</span></div>
+            <div class="demo-channel"><span class="demo-channel-icon">#</span> Signal Log <span style="background:rgba(0,248,248,0.15);color:var(--green);font-size:9px;padding:1px 5px;border-radius:3px;margin-left:auto">5</span></div>
+          </div>
+          <div class="demo-group">
+            <div class="demo-group-label">Research</div>
+            <div class="demo-channel"><span class="demo-channel-icon">📄</span> Market Analysis <span style="background:rgba(0,248,248,0.15);color:var(--green);font-size:9px;padding:1px 5px;border-radius:3px;margin-left:auto">2</span></div>
+            <div class="demo-channel"><span class="demo-channel-icon">📄</span> On-chain Data</div>
+            <div class="demo-channel"><span class="demo-channel-icon">📄</span> Report Archive</div>
+          </div>
+        </div>
+        <!-- Right chat -->
+        <div class="demo-chat">
+          <div class="demo-chat-header"># Strategy Discussion <span>· Strategy Gen · Backtest Reports · Deployment</span></div>
+          <div class="demo-chat-body">
+            <!-- Backtest report card -->
+            <div class="chat-msg">
+              <div class="chat-avatar chat-avatar-bot">🤖</div>
+              <div style="flex:1;max-width:80%">
+                <div class="chat-name chat-name-bot" translate="no">Beacon <span style="background:rgba(0,248,248,0.12);color:var(--green);font-size:9px;padding:1px 5px;border-radius:3px;margin-left:4px">BOT</span></div>
+                <!-- Backtest card -->
+                <div style="background:#161D27;border:1px solid var(--border);border-radius:10px;padding:12px;margin-top:4px">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+                    <strong style="font-size:14px">BTC Trend Strategy — 2026 Q1 Backtest</strong>
+                    <span style="font-size:11px;cursor:pointer">↗</span>
+                  </div>
+                  <div style="font-size:12px;color:var(--text-2);margin-bottom:8px">Return +47.3%, Max DD -12.8%, Sharpe 2.14</div>
+                  <div style="display:inline-block;font-size:11px;border:1px solid var(--border);border-radius:5px;padding:3px 8px;color:var(--text-2)">Open in Canvas</div>
+                </div>
+                <!-- Deploy action card -->
+                <div style="background:#161D27;border:1px solid var(--border);border-radius:10px;padding:12px;margin-top:8px">
+                  <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
+                    <span style="font-size:13px">⚡</span>
+                    <strong style="font-size:13px">Deploy BTC Trend Strategy to Live</strong>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+                    <span style="background:rgba(0,248,248,0.12);color:var(--green);font-size:10px;padding:2px 8px;border-radius:4px;font-weight:600">MEDIUM</span>
+                    <span style="font-size:11px;color:var(--text-3)">2% position · 5x leverage</span>
+                  </div>
+                  <div style="background:#0D1118;border-radius:6px;padding:8px 10px;font-family:monospace;font-size:10px;color:var(--text-2);line-height:1.5;margin-bottom:8px">
+                    {"strategy":"BTC Trend v2.1","stopLoss":"2.7%"}
+                  </div>
+                  <div style="display:flex;gap:8px">
+                    <span style="background:var(--green);color:#000;font-size:11px;font-weight:600;padding:5px 12px;border-radius:5px;cursor:pointer">Approve</span>
+                    <span style="border:1px solid var(--border);font-size:11px;padding:5px 12px;border-radius:5px;color:var(--text-2);cursor:pointer">Edit</span>
+                  </div>
+                </div>
+                <!-- Trading signal card -->
+                <div style="background:#161D27;border:1px solid var(--border);border-radius:10px;padding:12px;margin-top:8px">
+                  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+                    <div><strong style="font-size:14px">BTC/USDT</strong> <span style="background:rgba(16,185,129,0.15);color:#10B981;font-size:10px;padding:2px 6px;border-radius:3px;font-weight:600;margin-left:6px">LONG</span></div>
+                    <span style="font-size:11px;border:1px solid var(--border);padding:4px 10px;border-radius:5px;color:var(--text-2);cursor:pointer">One-click Follow</span>
+                  </div>
+                  <div style="font-size:11px;color:var(--text-2);margin-bottom:8px">TrendHunter · 30d PnL +18.7%</div>
+                  <div style="display:flex;gap:8px;margin-bottom:8px">
+                    <div style="flex:1;background:#0D1118;border-radius:6px;padding:8px"><div style="font-size:10px;color:var(--text-3)">Entry</div><div style="font-size:16px;font-weight:700">96,800</div></div>
+                    <div style="flex:1;background:#0D1118;border-radius:6px;padding:8px"><div style="font-size:10px;color:var(--text-3)">Stop</div><div style="font-size:16px;font-weight:700">94,200</div></div>
+                    <div style="flex:1;background:#0D1118;border-radius:6px;padding:8px"><div style="font-size:10px;color:var(--text-3)">Target</div><div style="font-size:13px;font-weight:700">99.5K / 103K</div></div>
+                  </div>
+                  <div style="display:flex;gap:12px;font-size:11px;color:var(--text-3)">
+                    <span>Confidence: <strong style="color:var(--text)">high</strong></span>
+                    <span>Status: <strong style="color:#10B981">active</strong></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Input bar -->
+          <div class="demo-input">
+            <div class="demo-input-box">Type a message, Enter to send, / for commands</div>
+            <div class="demo-input-send">▶ Send</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="feat-s" id="features">
+    <div class="sh"><div class="sh-label">核心能力</div><h2 class="sh-title">接入一次，解锁全部。</h2></div>
+    <div class="feat-g">
+      <div class="fc"><div class="fc-i">⚡</div><div class="fc-t">永不错过行情</div><div class="fc-d">你睡着的时候，Beacon 在盯盘。信号、异动、机会 —— 推到你的频道，比你醒来更早。</div></div>
+      <div class="fc"><div class="fc-i">📡</div><div class="fc-t">先于市场一步</div><div class="fc-d">BTC 大户动向、ETH 资金费率异常、代币解锁 —— Beacon 帮你在人群反应之前看到关键信息。</div></div>
+      <div class="fc"><div class="fc-i">🖼️</div><div class="fc-t">报告清晰，零废话</div><div class="fc-d">不是一堆数据图表。Beacon 把市场分析整理成结构清晰的摘要，直接出现在你的频道里。</div></div>
+      <div class="fc"><div class="fc-i">💬</div><div class="fc-t">你的 24 小时加密分析师</div><div class="fc-d">"BTC 今天为什么跌？""我的持仓现在怎么样？" 直接问 Beacon，几秒内给出真实答案。</div></div>
+      <div class="fc"><div class="fc-i">🖥️</div><div class="fc-t">你在哪，它就在哪</div><div class="fc-d">网页版、桌面端、App 三端同步。Beacon 住在你的频道里 —— 不是那个你总忘了打开的标签页。</div></div>
+      <div class="fc"><div class="fc-i">🛡️</div><div class="fc-t">波动时保持清醒</div><div class="fc-d">行情急速变化时，Beacon 给你的是上下文和判断依据，而不是噪音。知道发生了什么，以及为什么。</div></div>
+    </div>
+  </section>
+
+  <!-- How -->
+  <section class="how-s">
+    <div class="sh"><div class="sh-label">如何开始</div><h2 class="sh-title">30 秒上手</h2></div>
+    <div class="how-g">
+      <div class="hc"><div class="hc-n">1</div><div class="hc-t">Open <span translate="no">BitMart AI</span></div><div class="hc-d">登录 BitMart，打开 AI 面板 —— 所有用户免费使用。</div></div>
+      <div class="hc"><div class="hc-n">2</div><div class="hc-t">随便问</div><div class="hc-d">直接输入你的问题 —— 行情动向、加密新闻、账户查询，什么都行。</div></div>
+      <div class="hc"><div class="hc-n">3</div><div class="hc-t">据此行动</div><div class="hc-d">获得清晰答案，追问细节，比市场快一步。</div></div>
+    </div>
+  </section>
+
+  <!-- Modes section removed -->
+
+  <!-- Roadmap removed -->
+
+  <!-- CTA -->
+  <section class="cta-s">
+    <div class="cta-w">
+      <h2 class="cta-t" translate="no"><span style="color:#00F8F8;-webkit-text-fill-color:#00F8F8">Beacon</span> is ready when you are.</h2>
+      <p class="cta-d">你的 AI 助手，全天候在线。开始对话吧。</p>
+      <a href="https://ai.bmexchangeaws-test.com/app/login" class="cta-btn" target="_blank" translate="no">立即体验 →</a>
+    </div>
+  </section>
+
+  <footer><div class="footer-inner"><span>© 2025 BitMart. All rights reserved.</span></div></footer>
+
+  <script>
+  // Lenis smooth scroll
+  const lenis = new Lenis({ lerp: 0.1, smoothWheel: true });
+  function raf(t) { lenis.raf(t); requestAnimationFrame(raf); }
+  requestAnimationFrame(raf);
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add(t => lenis.raf(t * 1000));
+  gsap.ticker.lagSmoothing(0);
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Nav scroll
+  ScrollTrigger.create({ start: 'top -60', onUpdate: s => document.getElementById('nav').classList.toggle('scrolled', s.progress > 0) });
+
+  // Hero video: show poster first, lazy-load video after first paint
+  const heroVideo = document.getElementById('hero-video');
+  const loadHeroVideo = () => {
+    if (!heroVideo || heroVideo.dataset.loaded === '1') return;
+    heroVideo.dataset.loaded = '1';
+    heroVideo.innerHTML = '<source src="hero-animation-loop.mp4" type="video/mp4" /><source src="hero-animation.mov" type="video/quicktime" />';
+    heroVideo.load();
+    const onReady = () => {
+      heroVideo.classList.add('is-ready');
+      heroVideo.play().catch(() => {});
+    };
+    heroVideo.addEventListener('canplay', onReady, { once: true });
+  };
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(() => setTimeout(loadHeroVideo, 200), { timeout: 1200 });
+  } else {
+    setTimeout(loadHeroVideo, 300);
+  }
+
+  // Section reveals
+  gsap.utils.toArray('.sh, .demo-box, .fc, .hc, .mc, .rm-i, .cta-w').forEach(el => {
+    gsap.from(el, { opacity: 0, y: 40, duration: 0.7, ease: 'power3.out',
+      scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none reverse' }
+    });
+  });
+  </script>
+</body>
+</html>
