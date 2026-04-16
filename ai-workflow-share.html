@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI 给设计和产品经理带来的新工作流</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f7f4ee;
+      --bg-soft: #fbfaf7;
+      --panel: rgba(255,255,255,0.82);
+      --panel-strong: rgba(255,255,255,0.95);
+      --text: #1f2a37;
+      --text-soft: #6f7b88;
+      --line: rgba(31, 42, 55, 0.08);
+      --accent: #7e9f8c;
+      --accent-2: #c9a66b;
+      --accent-3: #a8b7c7;
+      --shadow: 0 20px 60px rgba(40, 48, 56, 0.08);
+      --font-display: 'Cormorant Garamond', serif;
+      --font-body: 'Manrope', sans-serif;
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --duration-normal: 0.75s;
+      --title-size: clamp(1.35rem, 3.4vw, 3.2rem);
+      --h2-size: clamp(1.05rem, 2vw, 1.8rem);
+      --h3-size: clamp(0.92rem, 1.45vw, 1.08rem);
+      --body-size: clamp(0.74rem, 0.92vw, 0.88rem);
+      --small-size: clamp(0.56rem, 0.7vw, 0.68rem);
+      --slide-padding: clamp(1.2rem, 4vw, 4rem);
+      --content-gap: clamp(0.8rem, 2vw, 1.6rem);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; overflow-x: hidden; }
+    html { scroll-snap-type: y mandatory; scroll-behavior: smooth; }
+    body {
+      background:
+        radial-gradient(circle at top left, rgba(201,166,107,0.08), transparent 22%),
+        radial-gradient(circle at 85% 20%, rgba(126,159,140,0.08), transparent 18%),
+        linear-gradient(180deg, #f9f6f0 0%, #f6f2eb 100%);
+      color: var(--text);
+      font-family: var(--font-body);
+    }
+    .slide {
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      overflow: hidden;
+      scroll-snap-align: start;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+    .slide-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      max-height: 100%;
+      overflow: hidden;
+      padding: var(--slide-padding);
+      gap: var(--content-gap);
+      position: relative;
+      z-index: 2;
+    }
+    img, .image-container { max-width: 100%; max-height: min(50vh, 400px); object-fit: contain; }
+    @media (max-height: 700px) {
+      :root {
+        --slide-padding: clamp(0.8rem, 3vw, 2rem);
+        --title-size: clamp(1.4rem, 5vw, 2.9rem);
+        --h2-size: clamp(1.1rem, 3vw, 1.9rem);
+      }
+    }
+    @media (max-height: 600px) {
+      :root {
+        --slide-padding: clamp(0.6rem, 2.5vw, 1.4rem);
+        --body-size: clamp(0.72rem, 1vw, 0.92rem);
+      }
+      .nav-dots { display:none; }
+    }
+    @media (max-width: 760px) {
+      .hero-grid, .grid-2, .case-grid, .repo-grid, .ending-grid, .showcase-grid { grid-template-columns: 1fr !important; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.2s !important; }
+      html { scroll-behavior: auto; }
+    }
+
+    .progress-bar {
+      position: fixed; top: 0; left: 0; height: 3px; width: 0;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      z-index: 50; transition: width 0.2s ease;
+    }
+    .nav-dots {
+      position: fixed; right: 18px; top: 50%; transform: translateY(-50%);
+      display: flex; flex-direction: column; gap: 10px; z-index: 50;
+    }
+    .nav-dot {
+      width: 9px; height: 9px; border-radius: 999px; border: none;
+      background: rgba(31,42,55,0.16); cursor: pointer; transition: all 0.3s ease;
+    }
+    .nav-dot.active { background: var(--accent); transform: scale(1.35); }
+    .slide-index {
+      position: absolute; right: 24px; bottom: 16px;
+      font-size: var(--small-size); letter-spacing: 0.16em; text-transform: uppercase; color: rgba(31,42,55,0.34);
+    }
+    .eyebrow {
+      font-size: var(--small-size); letter-spacing: 0.18em; text-transform: uppercase; color: var(--accent);
+    }
+    h1, h2, h3 { font-family: var(--font-display); font-weight: 600; line-height: 1.05; }
+    h1 { font-size: clamp(0.86rem, 2vw, 1.85rem); max-width: none; white-space: nowrap; }
+    h2 { font-size: clamp(0.95rem, 1.8vw, 1.55rem); max-width: none; white-space: nowrap; }
+    h3 { font-size: var(--h3-size); }
+    p, li { font-size: var(--body-size); line-height: 1.55; color: var(--text-soft); }
+    strong { color: var(--text); }
+    .gradient-text {
+      background: linear-gradient(90deg, #7e9f8c, #c9a66b 70%);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      border-radius: 28px;
+      transition: transform 0.35s var(--ease-out-expo), box-shadow 0.35s var(--ease-out-expo), border-color 0.3s ease;
+    }
+    .panel:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 28px 70px rgba(40, 48, 56, 0.13);
+      border-color: rgba(126,159,140,0.18);
+    }
+    .pill {
+      display: inline-flex; align-items: center; gap: 0.35rem;
+      padding: 0.52rem 0.96rem; border-radius: 999px;
+      border: 1px solid rgba(126,159,140,0.18);
+      color: var(--text); background: rgba(255,255,255,0.78);
+      font-size: clamp(0.72rem, 1vw, 0.92rem);
+      font-weight: 600;
+    }
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity var(--duration-normal) var(--ease-out-expo), transform var(--duration-normal) var(--ease-out-expo);
+    }
+    .slide.visible .reveal { opacity: 1; transform: translateY(0); }
+    .reveal:nth-child(1){transition-delay:.08s}.reveal:nth-child(2){transition-delay:.16s}.reveal:nth-child(3){transition-delay:.24s}.reveal:nth-child(4){transition-delay:.32s}.reveal:nth-child(5){transition-delay:.4s}
+
+    /* Hero */
+    .hero-grid {
+      display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(560px, 1fr); gap: 1.6rem; align-items: center;
+    }
+    .hero-card { padding: 0.85rem; position: relative; overflow: hidden; width: 100%; }
+    .hero-card::after {
+      content: ''; position: absolute; width: 220px; height: 220px; right: -70px; bottom: -90px;
+      border-radius: 50%; background: radial-gradient(circle, rgba(126,159,140,0.18), transparent 70%);
+    }
+    .hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 0.55rem; margin-top: 0.55rem; }
+    .mini {
+      padding: 0.62rem; border-radius: 18px; background: rgba(255,255,255,0.58); border: 1px solid rgba(31,42,55,0.05);
+    }
+    .mini strong { display:block; font-size: clamp(0.86rem, 1.5vw, 1.18rem); margin-bottom: 0.14rem; }
+
+    /* Grids */
+    .grid-2 { display:grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .flow, .simple-card { padding: 1rem 1.05rem; }
+    .chips { display:flex; flex-wrap:wrap; gap:.5rem; }
+    .chip { padding: .42rem .72rem; border-radius: 999px; background: rgba(31,42,55,0.05); font-size: var(--small-size); color: var(--text); }
+    .flow ul { padding-left: 1rem; display:flex; flex-direction:column; gap:.45rem; }
+    .flow-traditional {
+      background: linear-gradient(180deg, rgba(244,238,234,0.9), rgba(255,255,255,0.86));
+      border-color: rgba(190,150,130,0.16);
+    }
+    .flow-modern {
+      background: linear-gradient(180deg, rgba(245,251,247,0.95), rgba(255,255,255,0.9));
+      border-color: rgba(126,159,140,0.18);
+    }
+    .traditional-pill {
+      background: rgba(190,150,130,0.12);
+      border-color: rgba(190,150,130,0.22);
+    }
+    .modern-pill {
+      background: rgba(126,159,140,0.12);
+      border-color: rgba(126,159,140,0.22);
+    }
+    .traditional-chip {
+      background: rgba(190,150,130,0.1);
+      color: #7e5d50;
+    }
+    .modern-chip {
+      background: rgba(126,159,140,0.12);
+      color: #4d6a59;
+    }
+
+    /* Dynamic case slide */
+    .case-grid { display:grid; grid-template-columns: .9fr 1.1fr; gap: 1rem; align-items: center; }
+    .chat-stack { display:flex; flex-direction:column; gap:.75rem; }
+    .bubble {
+      max-width: 88%; padding: .8rem .9rem; border-radius: 18px; box-shadow: var(--shadow);
+      font-size: var(--body-size); line-height: 1.45; position: relative; animation: float 4.8s ease-in-out infinite;
+      transition: transform 0.3s var(--ease-out-expo), box-shadow 0.3s ease;
+      cursor: default;
+    }
+    .bubble:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 24px 48px rgba(40,48,56,0.14);
+    }
+    .bubble.pm { align-self: flex-start; background: #ffffff; border: 1px solid rgba(201,166,107,0.18); animation-delay: 0s; }
+    .bubble.design { align-self: flex-end; background: #f3f8f4; border: 1px solid rgba(126,159,140,0.22); animation-delay: .6s; }
+    .bubble.ai { align-self: flex-start; background: #f6f4ff; border: 1px solid rgba(168,183,199,0.28); animation-delay: 1.2s; }
+    .bubble span { display:block; font-size: var(--small-size); color: rgba(31,42,55,0.5); margin-bottom: .2rem; }
+    .prototype-card {
+      padding: 1rem; border-radius: 30px; background: var(--panel-strong); border: 1px solid var(--line); box-shadow: var(--shadow);
+    }
+    .case-real-shot {
+      width: 100%;
+      margin-top: 0.8rem;
+      border-radius: 18px;
+      border: 1px solid rgba(31,42,55,0.06);
+      box-shadow: 0 16px 40px rgba(40,48,56,0.08);
+      max-height: 240px;
+      object-fit: cover;
+      object-position: top center;
+    }
+    .prototype-window {
+      border-radius: 22px; background: linear-gradient(180deg, #ffffff 0%, #fbfaf7 100%); border: 1px solid rgba(31,42,55,0.06); overflow: hidden;
+    }
+    .window-head { display:flex; align-items:center; gap:.45rem; padding:.8rem 1rem; border-bottom:1px solid rgba(31,42,55,0.06); }
+    .dot { width:10px; height:10px; border-radius:50%; }
+    .red { background:#f58f86; } .yellow { background:#eac36a; } .green { background:#8cc7a0; }
+    .proto-body { padding: 1rem; display:flex; flex-direction:column; gap:.85rem; }
+    .proto-nav, .proto-tabs, .proto-cards { display:flex; gap:.55rem; }
+    .proto-nav div, .proto-tabs div, .proto-card {
+      border-radius: 14px; background: rgba(31,42,55,0.04); border: 1px solid rgba(31,42,55,0.05);
+    }
+    .proto-nav div { height: 24px; flex:1; }
+    .proto-tabs div { height: 32px; width: 90px; }
+    .proto-tabs div.active { background: rgba(126,159,140,0.16); border-color: rgba(126,159,140,0.26); }
+    .proto-cards { display:grid; grid-template-columns: repeat(3, 1fr); gap:.6rem; }
+    .proto-card { height: 118px; padding:.65rem; position: relative; overflow:hidden; }
+    .proto-card.active { transform: scale(1.04); background: rgba(201,166,107,0.12); border-color: rgba(201,166,107,0.24); }
+    .proto-card::after { content:''; position:absolute; left:10px; right:10px; bottom:10px; height:6px; border-radius:999px; background: rgba(31,42,55,0.08); }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+    }
+
+    /* Dynamic showcase */
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 1rem;
+      align-items: center;
+    }
+    .showcase-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+    .showcase-item {
+      position: relative;
+      padding: 0.95rem;
+      border-radius: 24px;
+      background: rgba(255,255,255,0.82);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: transform 0.35s var(--ease-out-expo), box-shadow 0.35s var(--ease-out-expo), border-color 0.35s ease, background 0.35s ease;
+      transform-origin: center;
+      overflow: hidden;
+    }
+    .showcase-item::after {
+      content: '';
+      position: absolute;
+      inset: -30%;
+      background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(201,166,107,0.18), transparent 28%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    .showcase-item:hover::after,
+    .showcase-item.active::after { opacity: 1; }
+    .showcase-item:hover {
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 24px 50px rgba(40,48,56,0.12);
+    }
+    .showcase-item.active {
+      transform: scale(1.04);
+      border-color: rgba(126,159,140,0.26);
+      background: rgba(255,255,255,0.96);
+      box-shadow: 0 28px 70px rgba(40,48,56,0.16);
+    }
+    .showcase-item .scan-line {
+      position: absolute;
+      left: -20%;
+      top: 0;
+      width: 42%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+      transform: skewX(-18deg);
+      opacity: 0;
+      pointer-events: none;
+    }
+    .showcase-item:hover .scan-line {
+      opacity: 1;
+      animation: scanMove 1.1s ease;
+    }
+    .showcase-item h3 { margin-bottom: 0.3rem; }
+    .showcase-preview {
+      position: relative;
+      min-height: 420px;
+      border-radius: 28px;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      padding: 1rem;
+    }
+    .preview-shot {
+      position: absolute;
+      inset: 1rem;
+      width: calc(100% - 2rem);
+      height: calc(100% - 2rem);
+      object-fit: cover;
+      object-position: top center;
+      border-radius: 22px;
+      border: 1px solid rgba(31,42,55,0.06);
+      opacity: 0;
+      transform: scale(0.96);
+      transition: opacity 0.45s ease, transform 0.45s var(--ease-out-expo);
+      pointer-events: none;
+    }
+    .showcase-preview:hover .preview-shot.active {
+      transform: scale(1.03);
+    }
+    .preview-shot.active {
+      opacity: 1;
+      transform: scale(1);
+      pointer-events: auto;
+    }
+    .preview-caption {
+      position: absolute;
+      left: 1.5rem;
+      right: 1.5rem;
+      bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.75rem 0.95rem;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.88);
+      border: 1px solid rgba(31,42,55,0.06);
+      box-shadow: 0 10px 30px rgba(40,48,56,0.08);
+      z-index: 3;
+    }
+    .showcase-preview::after {
+      content: '';
+      position: absolute;
+      width: 160px;
+      height: 160px;
+      right: var(--glow-x, 18%);
+      top: var(--glow-y, 18%);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,166,107,0.18), transparent 65%);
+      filter: blur(10px);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .showcase-preview:hover::after {
+      opacity: 1;
+    }
+    .preview-caption strong { display: block; margin-bottom: 0.2rem; }
+    .preview-chip {
+      white-space: nowrap;
+      padding: 0.5rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(126,159,140,0.1);
+      border: 1px solid rgba(126,159,140,0.16);
+      font-size: clamp(0.66rem, 0.85vw, 0.8rem);
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    /* Repo */
+    .repo-grid { display:grid; grid-template-columns: repeat(4, 1fr); gap:.8rem; }
+    .repo-card { padding: .95rem; border-radius: 22px; background: rgba(255,255,255,0.72); border:1px solid var(--line); transition: transform 0.3s var(--ease-out-expo), box-shadow 0.3s ease, border-color 0.3s ease; }
+    .repo-card:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 24px 48px rgba(40,48,56,0.14); border-color: rgba(126,159,140,0.22); }
+    .evidence-grid { display:grid; grid-template-columns: 1fr 1fr; gap: .9rem; margin-top: .9rem; }
+    .evidence-card { padding: .8rem; border-radius: 24px; background: rgba(255,255,255,0.82); border:1px solid var(--line); box-shadow: var(--shadow); }
+    .evidence-card img { width: 100%; max-height: 220px; object-fit: cover; border-radius: 16px; border: 1px solid rgba(31,42,55,0.06); }
+    .evidence-card p { margin-top: .55rem; }
+
+    /* End */
+    .ending-grid { display:grid; grid-template-columns: 1.1fr 0.9fr; gap: 1rem; align-items:center; }
+    .summary-visual {
+      position: relative;
+      min-height: 50vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .orbit-core {
+      width: clamp(120px, 14vw, 180px);
+      height: clamp(120px, 14vw, 180px);
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #ffffff, #f1ece1 70%);
+      border: 1px solid rgba(31,42,55,0.08);
+      box-shadow: 0 18px 50px rgba(40,48,56,0.10);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-family: var(--font-display);
+      font-size: clamp(1rem, 1.8vw, 1.5rem);
+      color: var(--text);
+      z-index: 2;
+      animation: pulseCore 4s ease-in-out infinite;
+    }
+    .orbit-ring {
+      position: absolute;
+      border: 1px dashed rgba(126,159,140,0.25);
+      border-radius: 50%;
+      animation: rotateRing 24s linear infinite;
+    }
+    .orbit-ring.r1 { width: clamp(240px, 30vw, 360px); height: clamp(240px, 30vw, 360px); }
+    .orbit-ring.r2 { width: clamp(340px, 42vw, 500px); height: clamp(340px, 42vw, 500px); animation-direction: reverse; animation-duration: 32s; }
+    .orbit-node {
+      position: absolute;
+      padding: 0.55rem 0.9rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.9);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      font-size: clamp(0.7rem, 0.95vw, 0.92rem);
+      font-weight: 600;
+      color: var(--text);
+      animation: floatNode 4.5s ease-in-out infinite;
+      white-space: nowrap;
+    }
+    .n1 { top: 8%; left: 50%; transform: translateX(-50%); }
+    .n2 { top: 28%; right: 4%; animation-delay: .5s; }
+    .n3 { bottom: 18%; right: 12%; animation-delay: 1s; }
+    .n4 { bottom: 8%; left: 50%; transform: translateX(-50%); animation-delay: 1.5s; }
+    .n5 { bottom: 24%; left: 6%; animation-delay: 2s; }
+    .summary-panel {
+      padding: 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    .summary-line {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .summary-chip {
+      padding: 0.48rem 0.8rem;
+      border-radius: 999px;
+      background: rgba(126,159,140,0.1);
+      color: var(--text);
+      font-size: clamp(0.68rem, 0.9vw, 0.82rem);
+      border: 1px solid rgba(126,159,140,0.16);
+      transition: transform 0.25s ease, background 0.25s ease, border-color 0.25s ease;
+      cursor: default;
+    }
+    .summary-chip:hover {
+      transform: scale(1.06);
+      background: rgba(201,166,107,0.14);
+      border-color: rgba(201,166,107,0.22);
+    }
+    @keyframes rotateRing {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes scanMove {
+      from { left: -24%; }
+      to { left: 120%; }
+    }
+    @keyframes pulseCore {
+      0%, 100% { transform: scale(1); box-shadow: 0 18px 50px rgba(40,48,56,0.10); }
+      50% { transform: scale(1.04); box-shadow: 0 22px 60px rgba(126,159,140,0.16); }
+    }
+    @keyframes floatNode {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress-bar" id="progressBar"></div>
+  <nav class="nav-dots" id="navDots" aria-label="Slide navigation"></nav>
+
+  <section class="slide visible">
+    <div class="slide-content hero-grid">
+      <div style="display:flex; flex-direction:column; gap:1.6rem;">
+        <span class="eyebrow reveal">AI Workflow Share</span>
+        <h1 class="reveal">AI 加速产品和设计协作，<span class="gradient-text">一天完成从需求到上线</span></h1>
+        <p class="reveal" style="max-width:86ch; margin-top:0.2rem;">以 Vivi × cap 的协作为例，AI 不只是辅助出图，而是在推动需求澄清、原型生成、设计决策沉淀与代码复用。</p>
+        <div class="reveal" style="display:flex;gap:.85rem;flex-wrap:wrap; margin-top:0.2rem;">
+          <span class="pill">AI 提问</span>
+          <span class="pill">Vivi 澄清</span>
+          <span class="pill">cap 决策</span>
+          <span class="pill">代码可入库</span>
+        </div>
+      </div>
+      <div class="hero-card panel reveal" style="justify-self:stretch; max-width:none; width:100%; margin-left:0;">
+        <span class="pill">Closed Loop</span>
+        <div class="hero-stats">
+          <div class="mini"><strong>PRD → Web</strong><p>需求快速变成可体验原型</p></div>
+          <div class="mini"><strong>Design → Skill</strong><p>设计判断被沉淀复用</p></div>
+          <div class="mini"><strong>Code → Repo</strong><p>前端直接承接已有代码</p></div>
+          <div class="mini"><strong>Iterate → Faster</strong><p>高频小步，多轮快速迭代</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-index">01 / 07</div>
+  </section>
+
+  <section class="slide">
+    <div class="slide-content">
+      <span class="eyebrow reveal">Workflow Shift</span>
+      <h2 class="reveal">从串行交接，变成原型驱动</h2>
+      <div class="grid-2">
+        <div class="flow panel reveal flow-traditional">
+          <span class="pill traditional-pill">传统</span>
+          <div class="chips" style="margin:.65rem 0 .8rem;"><span class="chip traditional-chip">PRD</span><span class="chip traditional-chip">设计稿</span><span class="chip traditional-chip">前端开发</span><span class="chip traditional-chip">上线</span></div>
+          <ul>
+            <li>产品主要输出文档</li>
+            <li>设计需要翻译需求</li>
+            <li>前端仍要二次理解</li>
+            <li>返工点出现较晚</li>
+          </ul>
+        </div>
+        <div class="flow panel reveal flow-modern">
+          <span class="pill modern-pill">现在</span>
+          <div class="chips" style="margin:.65rem 0 .8rem;"><span class="chip modern-chip">AI 提问</span><span class="chip modern-chip">原型生成</span><span class="chip modern-chip">决策沉淀</span><span class="chip modern-chip">代码承接</span></div>
+          <ul>
+            <li>Vivi 先把需求具象成页面</li>
+            <li>cap 基于原型做关键判断</li>
+            <li>AI 即时修改并生成代码</li>
+            <li>结果可以继续进入研发</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="slide-index">02 / 07</div>
+  </section>
+
+  <section class="slide">
+    <div class="slide-content case-grid">
+      <div class="chat-stack reveal">
+        <div class="bubble pm"><span>Vivi / 产品经理</span>我先把需求目标和页面结构说清楚，想先出一个可交互 web 原型。</div>
+        <div class="bubble ai"><span>AI</span>我来追问状态、tab 联动、多语言、样式细节，然后直接做页面。</div>
+        <div class="bubble design"><span>cap / 设计师</span>我基于这个原型给设计判断，减少从零开始出稿的成本。</div>
+        <div class="bubble ai"><span>AI</span>收到，我改样式、改交互、同步 14 个语言版本，并产出 repo-ready 代码。</div>
+      </div>
+      <div class="prototype-card reveal">
+        <span class="pill">动态案例 · BitMart landing page</span>
+        <img class="case-real-shot" src="landing-actual-shot.png" alt="Actual BitMart landing page" style="margin-top:.8rem; max-height: 320px; object-fit: cover; object-position: top center;" />
+        <p style="margin-top:.8rem;">在这个频道里，AI 不是只输出一版稿，而是随着 Vivi 和 cap 的反馈，不断改交互、同步多语言、修细节，最后直接形成可提交仓库的前端页面。</p>
+      </div>
+    </div>
+    <div class="slide-index">03 / 07</div>
+  </section>
+
+  <section class="slide">
+    <div class="slide-content">
+      <span class="eyebrow reveal">Closed Loop</span>
+      <h2 class="reveal">这套闭环的关键步骤</h2>
+      <div class="grid-2 reveal">
+        <div class="simple-card panel">
+          <div class="chips" style="margin-bottom:.7rem;"><span class="chip">1. 需求澄清</span></div>
+          <p>Vivi 提供需求，AI 主动追问信息架构、状态、交互和视觉方向，把模糊需求拆细。</p>
+        </div>
+        <div class="simple-card panel">
+          <div class="chips" style="margin-bottom:.7rem;"><span class="chip">2. 原型生成</span></div>
+          <p>AI 先做可体验页面，cap 再在原型上补足布局、视觉、品牌与体验判断。</p>
+        </div>
+        <div class="simple-card panel">
+          <div class="chips" style="margin-bottom:.7rem;"><span class="chip">3. 设计决策</span></div>
+          <p>关键体验、视觉与组件判断不再停留在口头沟通，而是直接沉淀进页面方案。</p>
+        </div>
+        <div class="simple-card panel">
+          <div class="chips" style="margin-bottom:.7rem;"><span class="chip">4. 沉淀 skill</span></div>
+          <p>成熟的设计决策沉淀成 skill，下一次生成原型时可以直接调用，减少重复决策。</p>
+        </div>
+        <div class="simple-card panel">
+          <div class="chips" style="margin-bottom:.7rem;"><span class="chip">5. 代码复用</span></div>
+          <p>页面代码进入仓库后，前端可以直接承接与工程化接入，而不是从零开始重写。</p>
+        </div>
+      </div>
+    </div>
+    <div class="slide-index">04 / 07</div>
+  </section>
+
+  <section class="slide">
+    <div class="slide-content">
+      <span class="eyebrow reveal">Decision as Asset</span>
+      <h2 class="reveal">设计判断，不再只存在一次协作里</h2>
+      <div class="grid-2 reveal">
+        <div class="panel" style="padding:1rem;display:flex;flex-direction:column;gap:.7rem;">
+          <span class="pill">cap 的价值被放大</span>
+          <p>cap 做出的布局、风格、组件和体验判断，可以被整理成 skill。下一次 Vivi 再生成相似页面时，不需要重新解释一遍。</p>
+          <p>设计的工作从“重复出稿”逐步转向“沉淀决策系统”。</p>
+        </div>
+        <div class="panel" style="padding:1rem;display:flex;flex-direction:column;gap:.7rem;">
+          <span class="pill">Vivi 的输出被放大</span>
+          <p>Vivi 不再只交付文档，而是推动 AI 把需求变成原型、再变成可入库代码，让产出更接近最终方案。</p>
+          <p>产品输出从说明书，升级为半成品方案。</p>
+        </div>
+      </div>
+    </div>
+    <div class="slide-index">05 / 07</div>
+  </section>
+
+  <section class="slide">
+    <div class="slide-content">
+      <span class="eyebrow reveal">Dynamic Product Showcase</span>
+      <h2 class="reveal">点击卡片，直接看产品展示效果</h2>
+      <div class="showcase-grid reveal">
+        <div class="showcase-list">
+          <div class="showcase-item active" data-target="landing">
+            <span class="scan-line"></span>
+            <h3>BitMart landing page</h3>
+            <p>展示页面结构、视觉完成度、多语言同步和交互落地能力。</p>
+          </div>
+          <div class="showcase-item" data-target="beacon">
+            <span class="scan-line"></span>
+            <h3>Beacon deck</h3>
+            <p>更适合展示 deck 产品形态、动态内容承载和演示表达方式。</p>
+          </div>
+          <div class="showcase-item" data-target="repo">
+            <span class="scan-line"></span>
+            <h3>代码仓库承接</h3>
+            <p>展示页面结果如何进入 repo，并被前端继续承接与工程化上线。</p>
+          </div>
+        </div>
+        <div class="showcase-preview">
+          <img class="preview-shot active" data-shot="landing" src="bitmart-landing-display.png" alt="BitMart landing page screenshot">
+          <img class="preview-shot" data-shot="beacon" src="beacon-shot.png" alt="Beacon deck screenshot">
+          <img class="preview-shot" data-shot="repo" src="repo-redacted.png" alt="Redacted repository screenshot">
+          <div class="preview-caption" id="previewCaption">
+            <div>
+              <strong>BitMart landing page</strong>
+              <p>从需求到页面，直接形成可展示的 HTML 产出。</p>
+            </div>
+            <span class="preview-chip">Click to enlarge feel</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slide-index">06 / 07</div>
+  </section>
+
+  <section class="slide">
+    <div class="slide-content ending-grid">
+      <div class="summary-visual reveal">
+        <div class="orbit-ring r1"></div>
+        <div class="orbit-ring r2"></div>
+        <div class="orbit-core">AI ×<br>Workflow</div>
+        <div class="orbit-node n1">需求澄清</div>
+        <div class="orbit-node n2">原型生成</div>
+        <div class="orbit-node n3">设计决策</div>
+        <div class="orbit-node n4">沉淀 skill</div>
+        <div class="orbit-node n5">代码复用</div>
+      </div>
+      <div class="panel summary-panel reveal">
+        <span class="eyebrow">Ending</span>
+        <h2 style="max-width:none;white-space:normal;">AI 正在把产品与设计协作，重构成可复用的新闭环</h2>
+        <div class="summary-line">
+          <span class="summary-chip">需求澄清</span>
+          <span class="summary-chip">原型生成</span>
+          <span class="summary-chip">设计决策</span>
+          <span class="summary-chip">沉淀 skill</span>
+          <span class="summary-chip">代码复用</span>
+        </div>
+        <p>它不再只是沟通材料，而是在形成可持续复用的设计与代码资产。</p>
+      </div>
+    </div>
+    <div class="slide-index">07 / 07</div>
+  </section>
+
+  <script>
+    class SlidePresentation {
+      constructor() {
+        this.slides = document.querySelectorAll('.slide');
+        this.currentSlide = 0;
+        this.navDots = document.getElementById('navDots');
+        this.progressBar = document.getElementById('progressBar');
+        this.isScrolling = false;
+        this.setupIntersectionObserver();
+        this.setupKeyboardNav();
+        this.setupWheelNav();
+        this.setupTouchNav();
+        this.setupNavDots();
+        this.setupProgressBar();
+        this.updateActiveState();
+      }
+      setupIntersectionObserver() {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              const index = Array.from(this.slides).indexOf(entry.target);
+              if (index >= 0) { this.currentSlide = index; this.updateActiveState(); }
+            }
+          });
+        }, { threshold: 0.55 });
+        this.slides.forEach(slide => observer.observe(slide));
+      }
+      setupKeyboardNav() {
+        document.addEventListener('keydown', (e) => {
+          if (["ArrowDown", "PageDown", " "].includes(e.key)) { e.preventDefault(); this.goToSlide(this.currentSlide + 1); }
+          if (["ArrowUp", "PageUp"].includes(e.key)) { e.preventDefault(); this.goToSlide(this.currentSlide - 1); }
+        });
+      }
+      setupWheelNav() {
+        window.addEventListener('wheel', (e) => {
+          if (this.isScrolling) return;
+          if (Math.abs(e.deltaY) < 20) return;
+          this.isScrolling = true;
+          if (e.deltaY > 0) this.goToSlide(this.currentSlide + 1); else this.goToSlide(this.currentSlide - 1);
+          setTimeout(() => this.isScrolling = false, 700);
+        }, { passive: true });
+      }
+      setupTouchNav() {
+        let startY = 0;
+        window.addEventListener('touchstart', (e) => startY = e.changedTouches[0].clientY, { passive: true });
+        window.addEventListener('touchend', (e) => {
+          const diff = startY - e.changedTouches[0].clientY;
+          if (Math.abs(diff) < 50) return;
+          if (diff > 0) this.goToSlide(this.currentSlide + 1); else this.goToSlide(this.currentSlide - 1);
+        }, { passive: true });
+      }
+      setupNavDots() {
+        this.slides.forEach((_, index) => {
+          const dot = document.createElement('button');
+          dot.className = 'nav-dot';
+          dot.setAttribute('aria-label', `Go to slide ${index + 1}`);
+          dot.addEventListener('click', () => this.goToSlide(index));
+          this.navDots.appendChild(dot);
+        });
+      }
+      setupProgressBar() {
+        const update = () => {
+          const progress = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+          this.progressBar.style.width = `${Math.min(progress, 100)}%`;
+        };
+        window.addEventListener('scroll', update, { passive: true });
+        update();
+      }
+      updateActiveState() {
+        this.navDots.querySelectorAll('.nav-dot').forEach((dot, index) => dot.classList.toggle('active', index === this.currentSlide));
+      }
+      goToSlide(index) {
+        const target = Math.max(0, Math.min(index, this.slides.length - 1));
+        this.slides[target].scrollIntoView({ behavior: 'smooth' });
+        this.currentSlide = target;
+        this.updateActiveState();
+      }
+    }
+
+    new SlidePresentation();
+
+    const showcaseItems = document.querySelectorAll('.showcase-item');
+    const previewShots = document.querySelectorAll('.preview-shot');
+    const previewCaption = document.getElementById('previewCaption');
+    const showcaseCopy = {
+      landing: {
+        title: 'BitMart landing page',
+        text: '从需求到页面，直接形成可展示的 HTML 产出。',
+        chip: 'Visual result'
+      },
+      beacon: {
+        title: 'Beacon deck',
+        text: '更适合演示动态内容承载、叙事结构和可展示界面。',
+        chip: 'Dynamic deck'
+      },
+      repo: {
+        title: '代码仓库承接',
+        text: '页面结果进入 repo 后，前端可以直接继续工程化接入。',
+        chip: 'Repo-ready'
+      }
+    };
+
+    showcaseItems.forEach(item => {
+      item.addEventListener('mousemove', (e) => {
+        const rect = item.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        item.style.setProperty('--mx', `${x}%`);
+        item.style.setProperty('--my', `${y}%`);
+      });
+
+      item.addEventListener('click', () => {
+        const target = item.dataset.target;
+        showcaseItems.forEach(el => el.classList.toggle('active', el === item));
+        previewShots.forEach(shot => shot.classList.toggle('active', shot.dataset.shot === target));
+        const copy = showcaseCopy[target];
+        if (copy && previewCaption) {
+          previewCaption.innerHTML = `
+            <div>
+              <strong>${copy.title}</strong>
+              <p>${copy.text}</p>
+            </div>
+            <span class="preview-chip">${copy.chip}</span>
+          `;
+        }
+      });
+    });
+
+    const showcasePreview = document.querySelector('.showcase-preview');
+    if (showcasePreview) {
+      showcasePreview.addEventListener('mousemove', (e) => {
+        const rect = showcasePreview.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        showcasePreview.style.setProperty('--glow-x', `${x}%`);
+        showcasePreview.style.setProperty('--glow-y', `${y}%`);
+      });
+    }
+  </script>
+</body>
+</html>
